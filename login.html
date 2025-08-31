@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
     <style>
-        .login-container {
+        .auth-container {
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -18,9 +18,10 @@
             background: var(--gradient-1);
             position: relative;
             overflow: hidden;
+            padding: 2rem 1rem;
         }
 
-        .login-container::before {
+        .auth-container::before {
             content: '';
             position: absolute;
             top: 0;
@@ -32,32 +33,41 @@
                 radial-gradient(circle at 80% 20%, rgba(201, 169, 110, 0.08) 0%, transparent 50%);
         }
 
-        .login-card {
+        .auth-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             padding: 3rem;
             border-radius: 20px;
             border: 1px solid rgba(201, 169, 110, 0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             position: relative;
             z-index: 2;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .login-header {
+        .auth-header {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .login-header h1 {
+        .auth-header h1 {
             font-family: 'Playfair Display', serif;
             color: var(--gold);
             margin-bottom: 0.5rem;
             font-size: 2rem;
         }
 
-        .login-header p {
+        .auth-header p {
             color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .auth-message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
             font-size: 0.9rem;
         }
 
@@ -65,24 +75,75 @@
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: #fca5a5;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: none;
         }
 
-        .demo-credentials {
-            background: rgba(201, 169, 110, 0.1);
-            border: 1px solid rgba(201, 169, 110, 0.3);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            font-size: 0.85rem;
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
         }
 
-        .demo-credentials h4 {
-            color: var(--gold);
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+        }
+
+        .auth-toggle a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
         }
 
         .back-link {
@@ -91,50 +152,163 @@
             left: 2rem;
             z-index: 10;
         }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .auth-card {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="/" class="back-link btn btn-secondary">← Back to Home</a>
     
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>⚔️ Member Login</h1>
-                <p>Access your brotherhood resources</p>
-            </div>
-
-            <!-- Demo Credentials (Remove in production) -->
-            <div class="demo-credentials">
-                <h4>Demo Credentials:</h4>
-                <p><strong>Member:</strong> username: member, password: wcsc2025</p>
-                <p><strong>Leader:</strong> username: leader, password: leadership</p>
-            </div>
-
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required autocomplete="username">
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Login Form -->
+            <div id="login-container">
+                <div class="auth-header">
+                    <h1>⚔️ Member Login</h1>
+                    <p>Access your brotherhood resources</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email or Username</label>
+                        <input type="text" id="login-email" name="email" required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        Login
+                    </button>
+                </form>
+
+                <div class="auth-toggle">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Don't have an account?</p>
+                    <a href="#" id="show-register">Join the Brotherhood</a>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="register-container" style="display: none;">
+                <div class="auth-header">
+                    <h1>⚔️ Join the Brotherhood</h1>
+                    <p>Create your WCSC member account</p>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
-                    Login
-                </button>
-            </form>
+                <form id="register-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-full-name">Full Name *</label>
+                            <input type="text" id="register-full-name" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-username">Username *</label>
+                            <input type="text" id="register-username" name="username" required autocomplete="username">
+                        </div>
+                    </div>
 
-            <div style="text-align: center; margin-top: 2rem;">
-                <p style="color: var(--text-secondary); font-size: 0.85rem;">
-                    Need access? Contact your chapter leadership.
-                </p>
+                    <div class="form-group">
+                        <label for="register-email">Email Address *</label>
+                        <input type="email" id="register-email" name="email" required autocomplete="email">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-password">Password *</label>
+                            <input type="password" id="register-password" name="password" required autocomplete="new-password" minlength="8">
+                            <div class="password-requirements">
+                                Minimum 8 characters
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">Confirm Password *</label>
+                            <input type="password" id="register-confirm-password" name="confirm_password" required autocomplete="new-password" minlength="8">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-phone">Phone Number</label>
+                            <input type="tel" id="register-phone" name="phone" autocomplete="tel">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-chapter">Chapter *</label>
+                            <select id="register-chapter" name="chapter" required>
+                                <option value="">Select Chapter</option>
+                                <option value="Georgetown">Georgetown</option>
+                                <option value="Austin">Austin</option>
+                                <option value="Dallas">Dallas</option>
+                                <option value="Houston">Houston</option>
+                                <option value="San Antonio">San Antonio</option>
+                                <option value="Other">Other (Contact Leadership)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-bio">Brief Introduction</label>
+                        <textarea id="register-bio" name="bio" placeholder="Tell us a bit about yourself, your faith journey, or what draws you to the brotherhood..."></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <input type="checkbox" id="terms-agreement" required style="width: auto; margin-top: 0.2rem;">
+                            <label for="terms-agreement" style="font-size: 0.9rem; line-height: 1.4; margin-bottom: 0; cursor: pointer;">
+                                I understand that WCSC membership is for men committed to Judeo-Christian values, mutual accountability, and spiritual growth. I agree to participate respectfully and uphold the brotherhood's principles.
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="auth-toggle">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Already have an account?</p>
+                    <a href="#" id="show-login">Sign In</a>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Include Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="js/auth-supabase.js"></script>
 </body>
 </html>
