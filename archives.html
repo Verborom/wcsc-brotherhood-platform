@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Archives - WCSC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .archives-container {
+            padding-top: 100px;
+            min-height: 100vh;
+            background: var(--gradient-1);
+        }
+
+        .search-bar {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(201, 169, 110, 0.2);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(201, 169, 110, 0.2);
+        }
+
+        .archive-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .archive-item {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(201, 169, 110, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .archive-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(201, 169, 110, 0.15);
+            border-color: rgba(201, 169, 110, 0.3);
+        }
+
+        .archive-date {
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .archive-title {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .archive-preview {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .archive-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(201, 169, 110, 0.2);
+            color: var(--gold);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .archive-detail {
+            display: none;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+        }
+
+        .archive-detail.active {
+            display: block;
+        }
+
+        .notes-section {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .back-nav {
+            margin-bottom: 2rem;
+        }
+
+        .back-nav a {
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-required {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .login-required h2 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .login-required p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">⚔️ WCSC</a>
+            <ul class="nav-menu">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#principles">Principles</a></li>
+                <li><a href="index.html#pillars">Pillars</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="archives.html" class="active">Archives</a></li>
+                <li><a href="scripture.html">Scripture</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-secondary">Member Login</a>
+                <a href="index.html#contact" class="btn btn-primary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="archives-container">
+        <div class="container">
+            <div class="back-nav">
+                <a href="index.html">← Back to Home</a>
+            </div>
+
+            <!-- Login Required Message -->
+            <div id="login-required" class="login-required">
+                <div class="card">
+                    <h2>🔒 Member Access Required</h2>
+                    <p>Meeting archives are available to brotherhood members only.</p>
+                    <a href="login.html" class="btn btn-primary">Member Login</a>
+                </div>
+            </div>
+
+            <!-- Archives Content (Hidden until login) -->
+            <div id="archives-content" style="display: none;">
+                <div class="section-header">
+                    <h1 class="section-title">Meeting Archives</h1>
+                    <p class="section-subtitle">Brotherhood meeting notes and insights (transcripts private)</p>
+                </div>
+
+                <div class="card">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search meetings by date, topic, or theme..." id="search-input">
+                    </div>
+
+                    <div class="archive-list" id="archive-list">
+                        <!-- Archives will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/archives.js"></script>
+</body>
+</html>
