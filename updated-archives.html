@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Archives - WCSC Brotherhood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- Supabase Integration -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <a href="/">⚔️ WCSC Brotherhood</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <div class="member-only" style="display: none;">
+                <a href="/calendar.html">Calendar</a>
+                <a href="/archives.html" class="active">Archives</a>
+                <a href="/scripture.html">Scripture</a>
+            </div>
+        </div>
+        <div class="auth-buttons">
+            <!-- Populated by JavaScript -->
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="archives-header">
+                <div class="archives-title">
+                    <h1>📚 Meeting Archives</h1>
+                    <p>Search and explore our meeting history</p>
+                </div>
+                <div class="leader-only" style="display: none;">
+                    <button id="add-archive-btn" class="btn btn-primary">
+                        <i class="icon-plus"></i> Add Archive
+                    </button>
+                </div>
+            </div>
+
+            <div class="search-controls">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search meeting notes, topics, and scripture references...">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="filter-controls">
+                    <select id="date-filter">
+                        <option value="all">All Time</option>
+                        <option value="week">Past Week</option>
+                        <option value="month">Past Month</option>
+                        <option value="quarter">Past Quarter</option>
+                        <option value="year">Past Year</option>
+                    </select>
+                    <select id="type-filter">
+                        <option value="all">All Types</option>
+                        <option value="weekly">Weekly Meetings</option>
+                        <option value="special">Special Events</option>
+                        <option value="leadership">Leadership</option>
+                    </select>
+                    <button id="clear-filters" class="btn btn-secondary">Clear Filters</button>
+                </div>
+            </div>
+
+            <div id="filter-info" class="filter-info">
+                <!-- Filter information displayed here -->
+            </div>
+
+            <div id="archives-list" class="archives-list">
+                <!-- Archives will be rendered here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Archive Creation Modal -->
+    <div id="archive-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Meeting Archive</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="archive-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="meeting-date">Meeting Date *</label>
+                        <input type="date" id="meeting-date" name="meeting_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="meeting-type">Meeting Type *</label>
+                        <select id="meeting-type" name="meeting_type" required>
+                            <option value="weekly">Weekly Meeting</option>
+                            <option value="special">Special Event</option>
+                            <option value="leadership">Leadership Meeting</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archive-title">Title</label>
+                    <input type="text" id="archive-title" name="title" placeholder="Meeting title or theme">
+                </div>
+                
+                <div class="form-group">
+                    <label for="meeting-notes">Meeting Notes *</label>
+                    <textarea id="meeting-notes" name="notes" required rows="8" placeholder="Key discussion points, insights, and observations from the meeting..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="scripture-references">Scripture References</label>
+                    <input type="text" id="scripture-references" name="scripture_references" placeholder="John 3:16, Romans 8:28, etc. (comma-separated)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="action-items">Action Items</label>
+                    <textarea id="action-items" name="action_items" rows="3" placeholder="One action item per line">
+</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="meeting-transcript">Meeting Transcript (Optional)</label>
+                    <textarea id="meeting-transcript" name="transcript" rows="5" placeholder="Paste meeting transcript if available..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archive-tags">Tags</label>
+                    <input type="text" id="archive-tags" name="tags" placeholder="fellowship, service, study, etc. (comma-separated)">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Archive</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Archive Details Modal -->
+    <div id="archive-details-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <!-- Content populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth-supabase.js"></script>
+    <script src="js/archives-enhanced.js"></script>
+</body>
+</html>

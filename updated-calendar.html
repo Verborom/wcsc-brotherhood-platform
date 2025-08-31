@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - WCSC Brotherhood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- Supabase Integration -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <a href="/">⚔️ WCSC Brotherhood</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <div class="member-only" style="display: none;">
+                <a href="/calendar.html" class="active">Calendar</a>
+                <a href="/archives.html">Archives</a>
+                <a href="/scripture.html">Scripture</a>
+            </div>
+        </div>
+        <div class="auth-buttons">
+            <!-- Populated by JavaScript -->
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="calendar-header">
+                <div class="calendar-title">
+                    <h1>📅 Brotherhood Calendar</h1>
+                    <p>Stay connected with our meetings and events</p>
+                </div>
+                <div class="calendar-controls">
+                    <div class="view-controls">
+                        <button class="btn btn-secondary active" data-view="month">Month</button>
+                        <button class="btn btn-secondary" data-view="week">Week</button>
+                        <button class="btn btn-secondary" data-view="day">Day</button>
+                    </div>
+                    <div class="leader-only" style="display: none;">
+                        <button id="add-event-btn" class="btn btn-primary">
+                            <i class="icon-plus"></i> Add Event
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-navigation">
+                <button id="prev-month" class="btn btn-secondary">‹ Previous</button>
+                <h2 id="current-month-year">Loading...</h2>
+                <button id="next-month" class="btn btn-secondary">Next ›</button>
+                <button id="today-btn" class="btn btn-secondary">Today</button>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-main">
+                    <div id="calendar-grid" class="calendar-grid">
+                        <!-- Calendar will be rendered here -->
+                    </div>
+                </div>
+                <div id="events-sidebar" class="events-sidebar">
+                    <h3>Select a date to view events</h3>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Event Creation Modal -->
+    <div id="event-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Event</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="event-title">Event Title *</label>
+                    <input type="text" id="event-title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-type">Event Type *</label>
+                    <select id="event-type" name="event_type" required>
+                        <option value="meeting">Meeting</option>
+                        <option value="service">Service</option>
+                        <option value="fellowship">Fellowship</option>
+                        <option value="study">Study</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-date">Date *</label>
+                        <input type="date" id="event-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-time">Start Time *</label>
+                        <input type="time" id="event-time" name="time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end-time">End Time</label>
+                        <input type="time" id="event-end-time" name="end_time">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location" name="location" placeholder="Meeting location or address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-description">Description</label>
+                    <textarea id="event-description" name="description" rows="3" placeholder="Event details, agenda, or special instructions..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div id="event-details-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <!-- Content populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth-supabase.js"></script>
+    <script src="js/calendar-enhanced.js"></script>
+</body>
+</html>
