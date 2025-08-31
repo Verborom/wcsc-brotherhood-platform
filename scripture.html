@@ -3,372 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scripture Study - WCSC</title>
+    <title>Scripture Study - WCSC Brotherhood</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
+    <!-- Supabase Integration -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <a href="/">⚔️ WCSC Brotherhood</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <div class="member-only" style="display: none;">
+                <a href="/calendar.html">Calendar</a>
+                <a href="/archives.html">Archives</a>
+                <a href="/scripture.html" class="active">Scripture</a>
+            </div>
+        </div>
+        <div class="auth-buttons">
+            <!-- Populated by JavaScript -->
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="scripture-header">
+                <div class="scripture-title">
+                    <h1>📖 Scripture Study</h1>
+                    <p>Enhanced biblical study with original language analysis</p>
+                </div>
+                <div class="scripture-controls">
+                    <select id="package-select" class="package-selector">
+                        <option value="">Loading scripture packages...</option>
+                    </select>
+                    <div class="leader-only" style="display: none;">
+                        <button id="create-package-btn" class="btn btn-secondary">
+                            <i class="icon-plus"></i> Create Package
+                        </button>
+                        <button id="generate-from-meeting-btn" class="btn btn-primary">
+                            <i class="icon-ai"></i> Generate from Meeting
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="package-content" class="package-content">
+                <!-- Package content will be rendered here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripture Package Creation Modal -->
+    <div id="scripture-package-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Scripture Package</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="scripture-package-form">
+                <div class="form-group">
+                    <label for="package-title">Package Title *</label>
+                    <input type="text" id="package-title" name="title" required placeholder="e.g., 'Faith and Action in Daily Life'">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="package-week-date">Week Date *</label>
+                        <input type="date" id="package-week-date" name="week_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="package-theme">Theme</label>
+                        <input type="text" id="package-theme" name="theme" placeholder="Central theme or focus">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="primary-passages">Primary Scripture Passages *</label>
+                    <textarea id="primary-passages" name="primary_passages" rows="4" required
+                        placeholder="Enter scripture references, one per line:
+John 3:16 - For God so loved the world...
+Romans 8:28 - And we know that in all things..."></textarea>
+                    <small class="form-help">Format: Reference - Text (one passage per line)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="package-commentary">Commentary & Insights</label>
+                    <textarea id="package-commentary" name="commentary" rows="6"
+                        placeholder="Provide theological insights, practical applications, and connections between the passages..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reflection-questions">Reflection Questions</label>
+                    <textarea id="reflection-questions" name="reflection_questions" rows="4"
+                        placeholder="Enter reflection questions, one per line:
+How does this passage challenge your daily walk?
+What practical steps can you take this week?"></textarea>
+                    <small class="form-help">One question per line</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prayer-focus">Prayer Focus</label>
+                    <textarea id="prayer-focus" name="prayer_focus" rows="3"
+                        placeholder="Specific areas for prayer and meditation based on the scripture passages..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="practical-application">Practical Application</label>
+                    <textarea id="practical-application" name="practical_application" rows="4"
+                        placeholder="Concrete ways to apply these scriptures in daily life, work, relationships, and service..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth-supabase.js"></script>
+    <script src="js/scripture-enhanced.js"></script>
+
     <style>
-        .scripture-container {
-            padding-top: 100px;
-            min-height: 100vh;
-            background: var(--gradient-1);
-        }
-
-        .scripture-package {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 3rem;
+        .scripture-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
-            border: 1px solid rgba(201, 169, 110, 0.2);
         }
-
-        .package-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(201, 169, 110, 0.2);
-        }
-
-        .package-date {
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .package-theme {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .verse-analysis {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--gold);
-        }
-
-        .verse-reference {
-            color: var(--gold);
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .verse-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            font-style: italic;
-            color: var(--text-primary);
-            margin-bottom: 2rem;
-            line-height: 1.8;
-            padding: 1rem;
-            background: rgba(201, 169, 110, 0.05);
-            border-radius: 10px;
-        }
-
-        .original-text {
-            background: var(--dark-bg);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            font-family: 'Courier New', monospace;
-        }
-
-        .original-language {
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .transliteration {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-
-        .word-analysis {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        
+        .scripture-controls {
+            display: flex;
             gap: 1rem;
+            align-items: center;
+        }
+        
+        .package-selector {
+            min-width: 300px;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+        
+        .package-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: var(--text-secondary);
             margin-bottom: 2rem;
         }
-
-        .word-study {
-            background: rgba(201, 169, 110, 0.05);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid rgba(201, 169, 110, 0.1);
+        
+        .scripture-package {
+            max-width: none;
         }
-
-        .word-original {
+        
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .package-title {
+            font-family: 'Playfair Display', serif;
             color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 1rem;
         }
-
-        .word-meaning {
+        
+        .package-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .package-date {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .package-theme {
+            background: rgba(201, 169, 110, 0.2);
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .view-count {
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
-
-        .interpretation {
-            background: rgba(30, 41, 54, 0.8);
-            padding: 2rem;
-            border-radius: 15px;
+        
+        .package-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .primary-passages {
             margin-bottom: 2rem;
         }
-
-        .devotional {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
+        
+        .passages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .passage-block {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 1.5rem;
             border-left: 4px solid var(--gold);
         }
-
-        .contemplation-questions {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 2rem;
-            border-radius: 15px;
+        
+        .passage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
-
-        .question {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+        
+        .passage-header h3 {
+            color: var(--gold);
+            margin: 0;
         }
-
-        .question:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
+        
+        .passage-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
         }
-
-        .question-text {
-            color: var(--text-primary);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+        
+        .translation {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
         }
-
-        .question-guidance {
+        
+        .passage-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+        
+        .analyze-btn {
+            padding: 0.25rem 0.5rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .analyze-btn:hover {
+            background: var(--gold);
+            color: var(--bg-primary);
+        }
+        
+        .passage-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
             font-style: italic;
         }
-
-        .back-nav {
-            margin-bottom: 2rem;
+        
+        .passage-notes textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            resize: vertical;
         }
-
-        .back-nav a {
+        
+        .language-analysis {
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .language-analysis h2 {
             color: var(--gold);
-            text-decoration: none;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
+        
+        .analysis-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .analysis-content {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .analysis-term {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .original-term {
+            font-family: serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+        
+        .term-details p {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+        
+        .transliteration {
+            font-style: italic;
+            color: var(--text-primary) !important;
+        }
+        
+        .commentary-section,
+        .reflection-section,
+        .prayer-section,
+        .application-section,
+        .progress-section,
+        .meeting-connection {
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .commentary-section h2,
+        .reflection-section h2,
+        .prayer-section h2,
+        .application-section h2,
+        .progress-section h2,
+        .meeting-connection h2 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .reflection-questions {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .reflection-question {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .reflection-question h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .reflection-input textarea {
+            width: 100%;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            resize: vertical;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .progress-tracker {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .progress-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem;
+            border-radius: 6px;
+        }
+        
+        .action-steps input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .action-steps-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .scripture-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .scripture-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .package-selector {
+                min-width: auto;
+            }
+            
+            .package-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .package-info {
+                gap: 1rem;
+            }
+        }
     </style>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">⚔️ WCSC</a>
-            <ul class="nav-menu">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#principles">Principles</a></li>
-                <li><a href="index.html#pillars">Pillars</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="archives.html">Archives</a></li>
-                <li><a href="scripture.html" class="active">Scripture</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="login.html" class="btn btn-secondary">Member Login</a>
-                <a href="index.html#contact" class="btn btn-primary">Contact</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="scripture-container">
-        <div class="container">
-            <div class="back-nav">
-                <a href="index.html">← Back to Home</a>
-            </div>
-
-            <div class="section-header">
-                <h1 class="section-title">Scripture Study</h1>
-                <p class="section-subtitle">Enhanced biblical analysis with original languages</p>
-            </div>
-
-            <!-- Current Week's Package -->
-            <div class="scripture-package">
-                <div class="package-header">
-                    <div class="package-date">Week of January 27, 2025</div>
-                    <div class="package-theme">Building Unshakeable Brotherhood</div>
-                    <p style="color: var(--text-secondary);">Generated from Friday's meeting insights</p>
-                </div>
-
-                <!-- Verse Analysis 1 -->
-                <div class="verse-analysis">
-                    <div class="verse-reference">Ecclesiastes 4:12 (MEV)</div>
-                    <div class="verse-text">
-                        \"Though one may be overpowered, two can defend themselves. A cord of three strands is not quickly broken.\"
-                    </div>
-
-                    <div class="original-text">
-                        <div class="original-language">Original Hebrew:</div>
-                        <div class="transliteration">\"V'im-yitkeph echad hash'nayim ya'amdu negdo v'hachut ham'shulash lo bim'herah yinathek.\"</div>
-                    </div>
-
-                    <div class="word-analysis">
-                        <div class="word-study">
-                            <div class="word-original">יִתְקֵף (yitkeph)</div>
-                            <div class="word-meaning\">\"overpower/prevail\" - to attack and overcome through strength</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original">שְׁנַיִם (sh'nayim)</div>
-                            <div class="word-meaning\">\"two\" - dual unity, partnership in resistance</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original">יַעַמְדוּ (ya'amdu)</div>
-                            <div class="word-meaning\">\"stand firm\" - maintain position, resist attack</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original">חוּט (chut)</div>
-                            <div class=\"word-meaning\">\"cord/thread\" - binding material, covenant connection</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original">מְשֻׁלָּשׁ (m'shulash)</div>
-                            <div class="word-meaning\">\"threefold\" - tripled strength, divine number of completion</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original">יִנָּתֵק (yinnathek)</div>
-                            <div class="word-meaning\">\"torn apart\" - severed, broken under pressure</div>
-                        </div>
-                    </div>
-
-                    <div class="interpretation">
-                        <h4 style=\"color: var(--gold); margin-bottom: 1rem;\">Original Intent & Context:</h4>
-                        <p style=\"color: var(--text-secondary); line-height: 1.7;\">
-                            Solomon's wisdom literature emphasizes that isolation breeds vulnerability while unity creates exponential strength. The \"threefold cord\" isn't merely about human partnerships—it represents covenant relationships that include the divine presence. In ancient Near Eastern culture, threefold cords were used for the strongest applications: anchoring ships, binding heavy loads, and securing what could not afford to break. The text suggests that individual strength + human partnership + divine presence = unbreakable bonds.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Verse Analysis 2 -->
-                <div class="verse-analysis">
-                    <div class="verse-reference">Proverbs 27:17 (MEV)</div>
-                    <div class="verse-text">
-                        \"As iron sharpens iron, so one man sharpens another.\"
-                    </div>
-
-                    <div class="original-text">
-                        <div class="original-language">Original Hebrew:</div>
-                        <div class="transliteration\">\"Barzel b'barzel yachad v'ish yachad p'nei re'ehu.\"</div>
-                    </div>
-
-                    <div class="word-analysis">
-                        <div class="word-study">
-                            <div class="word-original\">בַּרְזֶל (barzel)</div>
-                            <div class="word-meaning\">\"iron\" - strongest metal known to ancient world, tool of war and work</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original\">יַחַד (yachad)</div>
-                            <div class="word-meaning\">\"sharpens\" - to make keen, intense friction that improves</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original\">אִישׁ (ish)</div>
-                            <div class="word-meaning\">\"man\" - mature male, warrior, leader with responsibility</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original\">פָּנִים (panim)</div>
-                            <div class="word-meaning\">\"face/character\" - entire countenance, personality, inner nature</div>
-                        </div>
-                        <div class="word-study">
-                            <div class="word-original\">רֵעַ (rea)</div>
-                            <div class="word-meaning\">\"friend/companion\" - intimate associate, covenant partner</div>
-                        </div>
-                    </div>
-
-                    <div class="interpretation">
-                        <h4 style=\"color: var(--gold); margin-bottom: 1rem;\">Original Intent & Context:</h4>
-                        <p style=\"color: var(--text-secondary); line-height: 1.7;\">
-                            The metallurgical metaphor reveals that sharpening requires friction, pressure, and skilled technique. Ancient blacksmiths knew that iron sharpens iron through deliberate contact—random collision merely creates sparks and damage. The process requires: right angle of contact, proper pressure, sustained interaction, and skilled guidance. Similarly, men sharpen each other's character through intentional relationship, honest feedback, challenging accountability, and mutual commitment to growth. The \"face\" being sharpened refers to the entire character and reputation of a man.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Devotional -->
-                <div class="devotional">
-                    <h3 style=\"color: var(--gold); margin-bottom: 1.5rem;\">Weekly Devotional: \"Forged Together\"</h3>
-                    <p style=\"color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;\">
-                        This week's meeting revealed God working among our brotherhood through themes of mutual strengthening and covenant loyalty. The scriptures remind us that our WCSC fellowship isn't just social gathering—it's spiritual warfare preparation.
-                    </p>
-                    <p style=\"color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;\">
-                        When Solomon wrote about the threefold cord, he understood that divine partnerships create unbreakable strength. Our brotherhood operates on this principle: individual strength + brotherhood unity + God's sovereignty = unstoppable force for good.
-                    </p>
-                    <p style=\"color: var(--text-secondary); line-height: 1.8;\">
-                        This week, look for opportunities to be the iron that sharpens a brother's blade. Encourage where you see discouragement. Stand firm where you see wavering. Serve where you see need. Remember: the friction of accountability isn't comfortable, but it's what transforms ordinary men into warriors.
-                    </p>
-                </div>
-
-                <!-- Contemplation Questions -->
-                <div class="contemplation-questions">
-                    <h3 style=\"color: var(--gold); margin-bottom: 2rem;\">Contemplation for the Week</h3>
-                    
-                    <div class="question">
-                        <div class="question-text">How has brotherhood changed your approach to personal challenges this month?</div>
-                        <div class="question-guidance\">Reflect on specific instances where clan support influenced your decisions or actions.</div>
-                    </div>
-
-                    <div class="question">
-                        <div class="question-text\">Name one specific way you can encourage a brother this week—then do it.</div>
-                        <div class="question-guidance\">Think beyond words to practical actions, resources, or time you can offer.</div>
-                    </div>
-
-                    <div class="question">
-                        <div class="question-text\">What does \"sharpening\" look like in your daily interactions with the clan?</div>
-                        <div class="question-guidance\">Consider both giving and receiving constructive challenge and accountability.</div>
-                    </div>
-
-                    <div class="question">
-                        <div class="question-text\">How can our brotherhood better support each other's spiritual growth?</div>
-                        <div class="question-guidance\">Think systematically about prayer, study, accountability, and discipleship.</div>
-                    </div>
-
-                    <div class="question">
-                        <div class="question-text\">What prayer request have you been hesitant to share with your brothers?</div>
-                        <div class="question-guidance\">Consider the vulnerability required for deep brotherhood and spiritual growth.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Previous Packages Archive -->
-            <div class="card">
-                <h3 style=\"color: var(--gold); margin-bottom: 2rem;\">Previous Scripture Packages</h3>
-                <div id=\"previous-packages\">
-                    <div class=\"archive-item\" onclick=\"loadPackage('2025-01-20')\">
-                        <div class=\"archive-date\">January 20, 2025</div>
-                        <div class=\"archive-title\">Standing Firm in Truth</div>
-                        <div class=\"archive-preview\">Focus on biblical courage and defending righteousness...</div>
-                    </div>
-                    <div class=\"archive-item\" onclick=\"loadPackage('2025-01-13')\">
-                        <div class=\"archive-date\">January 13, 2025</div>
-                        <div class=\"archive-title\">Servant Leadership</div>
-                        <div class=\"archive-preview\">Christ's example of washing disciples' feet...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src=\"js/main.js\"></script>
-    <script src=\"js/auth.js\"></script>
-    <script src=\"js/scripture.js\"></script>
 </body>
 </html>
