@@ -3,317 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brotherhood Calendar - WCSC</title>
+    <title>Calendar - WCSC Brotherhood</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
-    <style>
-        .calendar-container {
-            padding-top: 100px;
-            min-height: 100vh;
-            background: var(--gradient-1);
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .calendar-nav {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .calendar-nav button {
-            background: var(--card-bg);
-            border: 1px solid rgba(201, 169, 110, 0.2);
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .calendar-nav button:hover {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .current-month {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--gold);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: rgba(201, 169, 110, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .calendar-day-header {
-            background: var(--navy);
-            padding: 1rem;
-            text-align: center;
-            font-weight: 600;
-            color: var(--gold);
-        }
-
-        .calendar-day {
-            background: var(--card-bg);
-            min-height: 100px;
-            padding: 0.5rem;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .calendar-day:hover {
-            background: rgba(201, 169, 110, 0.1);
-        }
-
-        .calendar-day.other-month {
-            opacity: 0.3;
-        }
-
-        .calendar-day.today {
-            background: rgba(201, 169, 110, 0.2);
-            border: 2px solid var(--gold);
-        }
-
-        .calendar-day.has-event {
-            border-left: 4px solid var(--gold);
-        }
-
-        .day-number {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .calendar-event {
-            background: rgba(201, 169, 110, 0.2);
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            margin-bottom: 0.25rem;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        .calendar-event:hover {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .calendar-event.meeting {
-            background: rgba(34, 197, 94, 0.2);
-        }
-
-        .calendar-event.service {
-            background: rgba(59, 130, 246, 0.2);
-        }
-
-        .calendar-event.social {
-            background: rgba(168, 85, 247, 0.2);
-        }
-
-        .add-event-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--gold);
-            color: var(--navy);
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(201, 169, 110, 0.3);
-            transition: all 0.3s ease;
-            display: none;
-        }
-
-        .add-event-btn.show {
-            display: block;
-        }
-
-        .add-event-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(201, 169, 110, 0.4);
-        }
-
-        .event-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-        }
-
-        .event-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .event-modal-content {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .back-nav {
-            margin-bottom: 2rem;
-        }
-
-        .back-nav a {
-            color: var(--gold);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .back-nav a:hover {
-            color: var(--gold-light);
-        }
-    </style>
+    <!-- Supabase Integration -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">⚔️ WCSC</a>
-            <ul class="nav-menu">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#principles">Principles</a></li>
-                <li><a href="index.html#pillars">Pillars</a></li>
-                <li><a href="calendar.html" class="active">Calendar</a></li>
-                <li><a href="archives.html">Archives</a></li>
-                <li><a href="scripture.html">Scripture</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="login.html" class="btn btn-secondary">Member Login</a>
-                <a href="index.html#contact" class="btn btn-primary">Contact</a>
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <a href="/">⚔️ WCSC Brotherhood</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <div class="member-only" style="display: none;">
+                <a href="/calendar.html" class="active">Calendar</a>
+                <a href="/archives.html">Archives</a>
+                <a href="/scripture.html">Scripture</a>
             </div>
+        </div>
+        <div class="auth-buttons">
+            <!-- Populated by JavaScript -->
         </div>
     </nav>
 
-    <div class="calendar-container">
+    <main class="main-content">
         <div class="container">
-            <div class="back-nav">
-                <a href="index.html">← Back to Home</a>
+            <div class="calendar-header">
+                <div class="calendar-title">
+                    <h1>📅 Brotherhood Calendar</h1>
+                    <p>Stay connected with our meetings and events</p>
+                </div>
+                <div class="calendar-controls">
+                    <div class="view-controls">
+                        <button class="btn btn-secondary active" data-view="month">Month</button>
+                        <button class="btn btn-secondary" data-view="week">Week</button>
+                        <button class="btn btn-secondary" data-view="day">Day</button>
+                    </div>
+                    <div class="leader-only" style="display: none;">
+                        <button id="add-event-btn" class="btn btn-primary">
+                            <i class="icon-plus"></i> Add Event
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="section-header">
-                <h1 class="section-title">Brotherhood Calendar</h1>
-                <p class="section-subtitle">Stay connected with meetings, events, and service opportunities</p>
+            <div class="calendar-navigation">
+                <button id="prev-month" class="btn btn-secondary">‹ Previous</button>
+                <h2 id="current-month-year">Loading...</h2>
+                <button id="next-month" class="btn btn-secondary">Next ›</button>
+                <button id="today-btn" class="btn btn-secondary">Today</button>
             </div>
 
-            <div class="card">
-                <div class="calendar-header">
-                    <div class="calendar-nav">
-                        <button onclick="previousMonth()">‹ Prev</button>
-                        <div class="current-month" id="current-month">January 2025</div>
-                        <button onclick="nextMonth()">Next ›</button>
+            <div class="calendar-container">
+                <div class="calendar-main">
+                    <div id="calendar-grid" class="calendar-grid">
+                        <!-- Calendar will be rendered here -->
                     </div>
-                    <button onclick="showToday()" class="btn btn-secondary">Today</button>
                 </div>
-
-                <div class="calendar-grid" id="calendar-grid">
-                    <!-- Calendar will be generated by JavaScript -->
-                </div>
-
-                <div style="margin-top: 2rem;">
-                    <h3 style="color: var(--gold); margin-bottom: 1rem;">Event Types</h3>
-                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(34, 197, 94, 0.2); border-radius: 3px;"></div>
-                            <span>Brotherhood Meetings</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(59, 130, 246, 0.2); border-radius: 3px;"></div>
-                            <span>Service Events</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="width: 20px; height: 20px; background: rgba(168, 85, 247, 0.2); border-radius: 3px;"></div>
-                            <span>Social Activities</span>
-                        </div>
-                    </div>
+                <div id="events-sidebar" class="events-sidebar">
+                    <h3>Select a date to view events</h3>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Add Event Button (Leadership Only) -->
-    <button class="add-event-btn" id="add-event-btn" onclick="showAddEvent()">+</button>
-
-    <!-- Event Modal -->
-    <div class="event-modal" id="event-modal">
-        <div class="event-modal-content">
-            <button class="close-modal" onclick="hideEventModal()">×</button>
-            <h3 style="color: var(--gold); margin-bottom: 2rem;">Add Event</h3>
+    <!-- Event Creation Modal -->
+    <div id="event-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Event</h3>
+                <button class="modal-close">&times;</button>
+            </div>
             <form id="event-form">
                 <div class="form-group">
-                    <label>Event Title</label>
-                    <input type="text" id="event-title" required>
+                    <label for="event-title">Event Title *</label>
+                    <input type="text" id="event-title" name="title" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" id="event-date" required>
-                </div>
-                <div class="form-group">
-                    <label>Time</label>
-                    <input type="time" id="event-time" required>
-                </div>
-                <div class="form-group">
-                    <label>Type</label>
-                    <select id="event-type" required>
-                        <option value="meeting">Brotherhood Meeting</option>
-                        <option value="service">Service Event</option>
-                        <option value="social">Social Activity</option>
+                    <label for="event-type">Event Type *</label>
+                    <select id="event-type" name="event_type" required>
+                        <option value="meeting">Meeting</option>
+                        <option value="service">Service</option>
+                        <option value="fellowship">Fellowship</option>
+                        <option value="study">Study</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="event-description" rows="3"></textarea>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-date">Date *</label>
+                        <input type="date" id="event-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-time">Start Time *</label>
+                        <input type="time" id="event-time" name="time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end-time">End Time</label>
+                        <input type="time" id="event-end-time" name="end_time">
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Add Event</button>
+                
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location" name="location" placeholder="Meeting location or address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-description">Description</label>
+                    <textarea id="event-description" name="description" rows="3" placeholder="Event details, agenda, or special instructions..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                </div>
             </form>
         </div>
     </div>
 
+    <!-- Event Details Modal -->
+    <div id="event-details-modal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <!-- Content populated by JavaScript -->
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/calendar.js"></script>
+    <script src="js/auth-supabase.js"></script>
+    <script src="js/calendar-enhanced.js"></script>
+
+    <style>
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .calendar-day-header {
+            background: var(--card-bg);
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .calendar-day {
+            background: var(--card-bg);
+            min-height: 100px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(201, 169, 110, 0.1);
+        }
+        
+        .calendar-day.today {
+            background: rgba(201, 169, 110, 0.2);
+        }
+        
+        .calendar-day.selected {
+            background: rgba(201, 169, 110, 0.3);
+            border: 2px solid var(--gold);
+        }
+        
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+        
+        .day-number {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .day-events {
+            margin-top: 0.5rem;
+        }
+        
+        .event-item {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            margin: 0.1rem 0;
+            border-radius: 3px;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .event-item.meeting { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .event-item.service { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+        .event-item.fellowship { background: rgba(168, 85, 247, 0.2); color: #c4b5fd; }
+        .event-item.study { background: rgba(251, 191, 36, 0.2); color: #fcd34d; }
+        
+        .more-events {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .events-sidebar {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            height: fit-content;
+        }
+        
+        .events-sidebar h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        
+        .day-events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .event-list-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .event-list-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .event-time {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .event-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .event-location {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-day {
+                min-height: 60px;
+                padding: 0.25rem;
+            }
+            
+            .event-item {
+                font-size: 0.6rem;
+                padding: 0.1rem 0.2rem;
+            }
+        }
+    </style>
 </body>
 </html>
