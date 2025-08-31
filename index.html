@@ -20,9 +20,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#principles">Principles</a></li>
                 <li><a href="#pillars">Pillars</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="archives.html">Archives</a></li>
-                <li><a href="scripture.html">Scripture</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="auth-buttons">
                 <a href="login.html" class="btn btn-secondary">Member Login</a>
@@ -50,7 +48,7 @@
         <div class="container">
             <div class="section-header reveal">
                 <h2 class="section-title">Our Mission</h2>
-                <p class="section-subtitle">To lift each other up and empower one another; to support and enable; to connect and elevate; to be the iron that sharpens iron.</p>
+                <p class="section-subtitle">To lift each other up and empower one another; to support and enable; to connect and elevate; to be the iron that sharpens iron while serving our communities and being a light for others.</p>
             </div>
             
             <div class="grid grid-2">
@@ -76,7 +74,7 @@
                 <p class="section-subtitle">Guided by timeless Judeo-Christian values, including integrity, humility, courage, compassion, and stewardship.</p>
             </div>
             
-            <div class="grid grid-3">
+            <div class="grid grid-4">
                 <div class="card reveal">
                     <span class="card-icon">✡️</span>
                     <h3>Faith as Foundation</h3>
@@ -107,6 +105,16 @@
                     <h3>Excellence in All Things</h3>
                     <p>Strive for physical, mental, spiritual, and professional excellence, as we are called to honor God in our efforts.</p>
                 </div>
+                <div class="card reveal">
+                    <span class="card-icon">📚</span>
+                    <h3>Continuous Learning</h3>
+                    <p>Pursue spiritual growth and practical skills that benefit ourselves and others, embracing lifelong learning beyond formal education.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">⚡</span>
+                    <h3>Preparedness</h3>
+                    <p>Maintain readiness in all aspects of life - spiritual, physical, and practical - to serve effectively in times of need.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -120,6 +128,11 @@
             </div>
             
             <div class="grid grid-2">
+                <div class="card reveal">
+                    <span class="card-icon">✝️</span>
+                    <h3>Relationship with God</h3>
+                    <p>Our primary foundation - developing and maintaining a deep, personal relationship with the Almighty through prayer, scripture study, and faithful living.</p>
+                </div>
                 <div class="card reveal">
                     <span class="card-icon">🏋️</span>
                     <h3>Self-Improvement</h3>
@@ -135,11 +148,6 @@
                     <h3>Community Action</h3>
                     <p>Active service and advocacy to improve local areas, focusing on volunteerism, advocacy for constitutional values, and local problem-solving.</p>
                 </div>
-                <div class="card reveal">
-                    <span class="card-icon">🕊️</span>
-                    <h3>Calm Support</h3>
-                    <p>Steady, non-judgmental assistance that shelters, motivates, and respects others while calling out evil and promoting emotional resilience.</p>
-                </div>
             </div>
         </div>
     </section>
@@ -152,38 +160,28 @@
                 <p class="section-subtitle">Ready to begin your journey with the brotherhood?</p>
             </div>
             
-            <div class="grid grid-2">
-                <div class="card reveal">
-                    <h3>Chapter Locations</h3>
-                    <div style="margin-top: 2rem;">
-                        <h4 style="color: var(--gold); margin-bottom: 1rem;">Belton/Temple</h4>
-                        <p style="margin-bottom: 2rem; color: var(--text-secondary);">Level 3 Location</p>
-                        
-                        <h4 style="color: var(--gold); margin-bottom: 1rem;">Georgetown</h4>
-                        <p style="margin-bottom: 2rem; color: var(--text-secondary);">Staccato Ranch</p>
-                        
-                        <h4 style="color: var(--gold); margin-bottom: 1rem;">Harker Heights/Killeen</h4>
-                        <p style="color: var(--text-secondary);">Location TBD</p>
-                    </div>
-                </div>
+            <div class="container" style="max-width: 600px;">
                 <div class="modern-form reveal">
-                    <h3 style="margin-bottom: 2rem; color: var(--gold);">Get in Touch</h3>
-                    <form id="contact-form">
+                    <h3 style="margin-bottom: 2rem; color: var(--gold); text-align: center;">Get in Touch</h3>
+                    <form id="contact-form" action="https://formspree.io/f/xdknvpzq" method="POST">
+                        <input type="hidden" name="_next" value="https://verborom.github.io/wcsc-brotherhood-platform/">
+                        <input type="hidden" name="_subject" value="WCSC Brotherhood Inquiry">
+                        
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" required>
+                            <input type="text" name="name" required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" required>
+                            <input type="email" name="_replyto" required>
                         </div>
                         <div class="form-group">
                             <label>Phone</label>
-                            <input type="tel">
+                            <input type="tel" name="phone">
                         </div>
                         <div class="form-group">
                             <label>Message</label>
-                            <textarea rows="5" placeholder="Tell us about yourself and your interest in the brotherhood..."></textarea>
+                            <textarea name="message" rows="5" placeholder="Tell us about yourself and your interest in the brotherhood..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
                     </form>
