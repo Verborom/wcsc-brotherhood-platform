@@ -2,7 +2,7 @@
 
 class WCSCAuthentication {
     constructor() {
-        this.supabase = window.supabase || null;
+        this.supabase = null;
         this.currentUser = null;
         this.adminEmails = [
             'joe.lafilm@gmail.com',  // Your email
@@ -12,9 +12,44 @@ class WCSCAuthentication {
     }
 
     async init() {
+        // Wait for Supabase to be initialized
+        await this.initializeSupabase();
         await this.checkAuthState();
         this.updateUI();
         this.setupProfileDropdown();
+    }
+
+    async initializeSupabase() {
+        // Check if Supabase is available from the config file
+        if (window.supabaseClient) {
+            this.supabase = window.supabaseClient;
+            console.log('✅ Using Supabase client from config');
+        } else if (window.supabase) {
+            // Fallback to global supabase
+            this.supabase = window.supabase;
+            console.log('✅ Using global Supabase client');
+        } else {
+            // Wait a bit for scripts to load
+            console.log('⏳ Waiting for Supabase to initialize...');
+            let attempts = 0;
+            while (attempts < 10) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                if (window.supabaseClient) {
+                    this.supabase = window.supabaseClient;
+                    console.log('✅ Supabase client found after waiting');
+                    break;
+                } else if (window.supabase) {
+                    this.supabase = window.supabase;
+                    console.log('✅ Global Supabase found after waiting');
+                    break;
+                }
+                attempts++;
+            }
+            
+            if (!this.supabase) {
+                console.warn('⚠️ Supabase not available - using fallback authentication');
+            }
+        }
     }
 
     async checkAuthState() {
@@ -62,7 +97,9 @@ class WCSCAuthentication {
         let firstName = 'Brother';
         
         if (this.supabase && this.currentUser?.user_metadata) {
-            firstName = this.currentUser.user_metadata.firstName || 'Brother';
+            firstName = this.currentUser.user_metadata.firstName || 
+                       this.currentUser.user_metadata.full_name?.split(' ')[0] || 
+                       'Brother';
         } else if (this.currentUser?.firstName) {
             firstName = this.currentUser.firstName;
         }
@@ -89,16 +126,19 @@ class WCSCAuthentication {
     setupProfileDropdown() {
         const profileButton = document.getElementById('profileButton');
         const profileDropdown = document.getElementById('profileDropdown');
+        const profileMenu = document.getElementById('profileMenu');
 
-        if (profileButton && profileDropdown) {
+        if (profileButton && (profileDropdown || profileMenu)) {
             profileButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                profileDropdown.classList.toggle('active');
+                const dropdown = profileDropdown || profileMenu;
+                dropdown.classList.toggle('active');
             });
 
             document.addEventListener('click', (e) => {
-                if (!profileDropdown.contains(e.target)) {
-                    profileDropdown.classList.remove('active');
+                const dropdown = profileDropdown || profileMenu;
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('active');
                 }
             });
         }
@@ -135,14 +175,20 @@ class WCSCAuthentication {
 
     async signup(userData) {
         if (this.supabase) {
+            // Map form data to the correct structure
             const { data, error } = await this.supabase.auth.signUp({
                 email: userData.email,
                 password: userData.password,
                 options: {
                     data: {
-                        firstName: userData.firstName,
-                        lastName: userData.lastName,
+                        full_name: userData.fullName || userData.full_name,
+                        username: userData.username,
                         phone: userData.phone,
+                        chapter: userData.chapter,
+                        bio: userData.bio,
+                        // Legacy support for other field names
+                        firstName: userData.firstName || userData.fullName?.split(' ')[0] || userData.full_name?.split(' ')[0],
+                        lastName: userData.lastName || userData.fullName?.split(' ').slice(1).join(' ') || userData.full_name?.split(' ').slice(1).join(' '),
                         city: userData.city,
                         state: userData.state,
                         age: userData.age,
@@ -261,7 +307,9 @@ class WCSCAuthentication {
         if (!this.currentUser) return 'Guest';
         
         if (this.supabase && this.currentUser.user_metadata) {
-            return this.currentUser.user_metadata.firstName || 'Brother';
+            return this.currentUser.user_metadata.firstName || 
+                   this.currentUser.user_metadata.full_name?.split(' ')[0] || 
+                   'Brother';
         }
         
         return this.currentUser.firstName || 'Brother';
@@ -318,18 +366,21 @@ function getUserData() {
 
 // Initialize authentication system
 document.addEventListener('DOMContentLoaded', () => {
-    window.wcscAuth = new WCSCAuthentication();
-    
-    // Set up auth state monitoring if Supabase is available
-    if (window.wcscAuth.supabase) {
-        window.wcscAuth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event, session);
-            
-            if (event === 'SIGNED_OUT') {
-                window.location.href = 'index.html';
-            }
-        });
-    }
+    // Wait a bit for other scripts to load
+    setTimeout(() => {
+        window.wcscAuth = new WCSCAuthentication();
+        
+        // Set up auth state monitoring if Supabase is available
+        if (window.wcscAuth.supabase) {
+            window.wcscAuth.onAuthStateChange((event, session) => {
+                console.log('Auth state changed:', event, session);
+                
+                if (event === 'SIGNED_OUT') {
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    }, 100);
 });
 
 // Export for use in other scripts
