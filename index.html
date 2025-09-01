@@ -7,8 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- Force cache refresh with timestamp -->
+    <link rel="stylesheet" href="css/main.css?v=20250901-001">
+    <link rel="stylesheet" href="css/components.css?v=20250901-001">
     
     <!-- Error handling and loading indicator -->
     <style>
@@ -18,7 +20,7 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+            background: linear-gradient(90deg, var(--gold, #c9a96e) 0%, var(--gold-light, #d4b377) 100%);
             z-index: 9999;
             transform: translateX(-100%);
             animation: loading 3s ease-in-out infinite;
@@ -38,6 +40,41 @@
             margin: 1rem 0;
             color: #ef4444;
             display: none;
+        }
+        
+        /* Fallback styling if main CSS doesn't load */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0e13;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .main-nav {
+            background: rgba(10, 14, 19, 0.95);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #0a0e13 0%, #0f1419 50%, #1e2936 100%);
+            padding-top: 80px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
     </style>
 </head>
@@ -345,8 +382,32 @@
         // Global error handler
         window.addEventListener('error', function(e) {
             console.error('Script error:', e.error);
-            document.getElementById('error-boundary').style.display = 'block';
+            const errorBoundary = document.getElementById('error-boundary');
+            if (errorBoundary) {
+                errorBoundary.style.display = 'block';
+            }
         });
+        
+        // CSS loading check
+        function checkCSSLoaded() {
+            const testElement = document.querySelector('.hero');
+            if (testElement) {
+                const computedStyle = window.getComputedStyle(testElement);
+                const bgColor = computedStyle.backgroundColor;
+                
+                // If the background isn't styled, CSS didn't load properly
+                if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+                    console.warn('Main CSS may not have loaded properly');
+                    const errorBoundary = document.getElementById('error-boundary');
+                    if (errorBoundary) {
+                        errorBoundary.innerHTML = '<strong>⚠️ Styling may be incomplete due to network issues.</strong> Content is still fully functional.';
+                        errorBoundary.style.display = 'block';
+                    }
+                } else {
+                    console.log('✅ CSS loaded successfully');
+                }
+            }
+        }
         
         // Hide loading indicator when page loads
         window.addEventListener('load', function() {
@@ -354,16 +415,29 @@
             if (indicator) {
                 indicator.style.display = 'none';
             }
+            
+            // Check if CSS loaded properly
+            setTimeout(checkCSSLoaded, 100);
         });
+        
+        // Force hard refresh function (for testing)
+        function forceRefresh() {
+            window.location.reload(true);
+        }
+        
+        // Debug info
+        console.log('🔄 WCSC Brotherhood Platform - Page Loading...');
+        console.log('📍 Current URL:', window.location.href);
+        console.log('🕐 Load time:', new Date().toISOString());
     </script>
     
     <!-- Supabase Integration -->
     <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
-    <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
+    <script src="backend/config/supabase.js?v=20250901-001" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
     
     <!-- Main functionality -->
-    <script src="js/main.js"></script>
-    <script src="js/auth-supabase.js" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
-    <script src="js/contact-enhanced.js" onerror="console.warn('Enhanced contact script failed to load - basic contact form available')"></script>
+    <script src="js/main.js?v=20250901-001"></script>
+    <script src="js/auth-supabase.js?v=20250901-001" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
+    <script src="js/contact-enhanced.js?v=20250901-001" onerror="console.warn('Enhanced contact script failed to load - basic contact form available')"></script>
 </body>
 </html>
