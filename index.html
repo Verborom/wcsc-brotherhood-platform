@@ -7,14 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css?v=original">
-    <link rel="stylesheet" href="css/components.css?v=original">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
-    <!-- Navigation - ORIGINAL DESIGN -->
+    <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#home" class="logo">⚔️ WCSC</a>
+            <a href="#home" class="logo">⚔️ WCSC Brotherhood</a>
             <ul class="nav-menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
@@ -27,7 +27,7 @@
             <div class="auth-buttons">
                 <div class="guest-only">
                     <a href="login.html" class="btn btn-secondary">Member Login</a>
-                    <a href="#contact" class="btn btn-primary">Contact</a>
+                    <a href="#contact" class="btn btn-primary">Join the Brotherhood</a>
                 </div>
                 <div class="member-only" style="display: none;">
                     <a href="calendar.html" class="btn btn-secondary">Calendar</a>
@@ -37,21 +37,22 @@
         </div>
     </nav>
 
-    <!-- Hero Section - ORIGINAL DESIGN -->
-    <section class="hero" id="home">
+    <!-- Parallax Hero Section -->
+    <section class="parallax-hero" id="home">
+        <div class="parallax-bg"></div>
         <div class="hero-particles"></div>
         <div class="hero-content">
-            <h1>Warrior Class Soldier Clan</h1>
-            <p class="hero-subtitle">Judeo-Christian Brotherhood & Fraternity</p>
-            <p class="hero-tagline">"Iron Sharpens Iron" - Proverbs 27:17</p>
+            <p class="hero-subtitle">WARRIOR CLASS SOLDIER CLAN</p>
+            <h1>Iron Sharpens Iron</h1>
+            <p class="hero-description">A brotherhood of men committed to Judeo-Christian values, spiritual growth, and mutual accountability. Join us in building stronger faith, deeper fellowship, and purposeful service.</p>
             <div class="hero-buttons">
-                <a href="#about" class="btn btn-primary">Discover Our Mission</a>
-                <a href="#contact" class="btn btn-secondary">Join the Brotherhood</a>
+                <a href="#contact" class="btn btn-primary">Join the Brotherhood</a>
+                <a href="#about" class="btn btn-secondary">Learn More</a>
             </div>
         </div>
     </section>
 
-    <!-- Mission Section - ORIGINAL DESIGN -->
+    <!-- About Section - Mission, Vision, Foundation -->
     <section class="section" id="about">
         <div class="container">
             <div class="section-header reveal">
@@ -59,7 +60,7 @@
                 <p class="section-subtitle">To lift each other up and empower one another; to support and enable; to connect and elevate; to be the iron that sharpens iron while serving our communities and being a light for others.</p>
             </div>
             
-            <div class="grid grid-2">
+            <div class="grid grid-3">
                 <div class="card reveal">
                     <span class="card-icon">🎯</span>
                     <h3>Our Vision</h3>
@@ -70,15 +71,20 @@
                     <h3>Our Foundation</h3>
                     <p>Built on timeless Judeo-Christian values and principles, welcoming men from diverse backgrounds who align with our mission and values.</p>
                 </div>
+                <div class="card reveal">
+                    <span class="card-icon">⚔️</span>
+                    <h3>Our Brotherhood</h3>
+                    <p>A community of warriors united in faith, committed to excellence, and dedicated to sharpening one another through accountability and love.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Core Principles - ORIGINAL DESIGN -->
+    <!-- Core Principles - EIGHT PRINCIPLES -->
     <section class="section featured-section" id="principles">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Core Principles</h2>
+                <h2 class="section-title">Eight Core Principles</h2>
                 <p class="section-subtitle">Guided by timeless Judeo-Christian values, including integrity, humility, courage, compassion, and stewardship.</p>
             </div>
             
@@ -127,7 +133,7 @@
         </div>
     </section>
 
-    <!-- Four Pillars - ORIGINAL DESIGN -->
+    <!-- Four Pillars -->
     <section class="section" id="pillars">
         <div class="container">
             <div class="section-header reveal">
@@ -160,12 +166,12 @@
         </div>
     </section>
 
-    <!-- Contact Section - ORIGINAL DESIGN WITH BACKEND -->
+    <!-- Contact Section -->
     <section class="section featured-section" id="contact">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Contact Us</h2>
-                <p class="section-subtitle">Ready to begin your journey with the brotherhood?</p>
+                <h2 class="section-title">Join the Brotherhood</h2>
+                <p class="section-subtitle">Ready to begin your journey with us? Iron sharpens iron.</p>
             </div>
             
             <div class="container" style="max-width: 600px;">
@@ -195,7 +201,7 @@
         </div>
     </section>
 
-    <!-- Scripts - KEEP ALL BACKEND FUNCTIONALITY -->
+    <!-- Scripts -->
     <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
     <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
     <script src="js/main.js"></script>
