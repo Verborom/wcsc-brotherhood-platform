@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meeting Archives - WCSC</title>
+    <title>Archives - WCSC Brotherhood</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
@@ -11,136 +11,240 @@
     <link rel="stylesheet" href="css/components.css">
     <style>
         .archives-container {
-            padding-top: 100px;
-            min-height: 100vh;
-            background: var(--gradient-1);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
         .search-bar {
-            margin-bottom: 2rem;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            margin-bottom: 3rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .search-bar input {
-            width: 100%;
+        .search-input {
+            flex: 1;
+            min-width: 300px;
             padding: 1rem 1.5rem;
             border: 2px solid rgba(201, 169, 110, 0.2);
-            border-radius: 15px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.05);
             color: var(--text-primary);
             font-size: 1rem;
         }
 
-        .search-bar input:focus {
+        .search-input:focus {
             outline: none;
             border-color: var(--gold);
             box-shadow: 0 0 20px rgba(201, 169, 110, 0.2);
         }
 
-        .archive-list {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .archive-item {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(201, 169, 110, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .archive-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(201, 169, 110, 0.15);
-            border-color: rgba(201, 169, 110, 0.3);
-        }
-
-        .archive-date {
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .archive-title {
-            color: var(--text-primary);
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .archive-preview {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .archive-tags {
+        .filter-buttons {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid rgba(201, 169, 110, 0.3);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            border-color: var(--gold);
+            background: rgba(201, 169, 110, 0.1);
+            color: var(--gold);
+        }
+
+        .meetings-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .meeting-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(201, 169, 110, 0.1);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .meeting-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(201, 169, 110, 0.15);
+            border-color: rgba(201, 169, 110, 0.3);
+        }
+
+        .meeting-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            position: relative;
+        }
+
+        .meeting-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 70%, rgba(201, 169, 110, 0.05) 0%, transparent 50%);
+        }
+
+        .meeting-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .meeting-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .meeting-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stat-icon {
+            color: var(--gold);
+        }
+
+        .meeting-content {
+            padding: 2rem;
+        }
+
+        .meeting-summary {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .meeting-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
 
         .tag {
             background: rgba(201, 169, 110, 0.2);
             color: var(--gold);
             padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+            border-radius: 15px;
             font-size: 0.8rem;
+            font-weight: 500;
         }
 
-        .archive-detail {
-            display: none;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(201, 169, 110, 0.2);
-        }
-
-        .archive-detail.active {
-            display: block;
-        }
-
-        .notes-section {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        .back-nav {
-            margin-bottom: 2rem;
-        }
-
-        .back-nav a {
-            color: var(--gold);
-            text-decoration: none;
+        .meeting-actions {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .login-required {
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: var(--gold);
+            color: var(--navy);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.primary {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--gold-light);
+        }
+
+        .no-results {
             text-align: center;
             padding: 4rem 2rem;
+            color: var(--text-secondary);
         }
 
-        .login-required h2 {
+        .no-results-icon {
+            font-size: 4rem;
             color: var(--gold);
+            opacity: 0.5;
             margin-bottom: 1rem;
         }
 
-        .login-required p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+
+            .meeting-header,
+            .meeting-content {
+                padding: 1.5rem;
+            }
+
+            .meeting-stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .meeting-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar scrolled" id="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo">⚔️ WCSC</a>
+            <a href="index.html" class="logo">⚔️ WCSC Brotherhood</a>
             <ul class="nav-menu">
-                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#principles">Principles</a></li>
                 <li><a href="index.html#pillars">Pillars</a></li>
@@ -149,49 +253,276 @@
                 <li><a href="scripture.html">Scripture</a></li>
             </ul>
             <div class="auth-buttons">
-                <a href="login.html" class="btn btn-secondary">Member Login</a>
-                <a href="index.html#contact" class="btn btn-primary">Contact</a>
+                <a href="calendar.html" class="btn btn-secondary">Calendar</a>
+                <a href="scripture.html" class="btn btn-primary">Scripture</a>
             </div>
         </div>
     </nav>
 
-    <div class="archives-container">
-        <div class="container">
-            <div class="back-nav">
-                <a href="index.html">← Back to Home</a>
+    <main style="padding-top: 100px; min-height: 100vh; background: var(--dark-bg);">
+        <div class="archives-container">
+            <div class="section-header reveal" style="text-align: center; margin-bottom: 3rem;">
+                <h1 class="section-title">Brotherhood Archives</h1>
+                <p class="section-subtitle">Access meeting notes, transcripts, and AI-analyzed scripture insights from our gatherings.</p>
             </div>
 
-            <!-- Login Required Message -->
-            <div id="login-required" class="login-required">
-                <div class="card">
-                    <h2>🔒 Member Access Required</h2>
-                    <p>Meeting archives are available to brotherhood members only.</p>
-                    <a href="login.html" class="btn btn-primary">Member Login</a>
+            <!-- Search and Filter -->
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search meetings, topics, or scripture references...">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All Meetings</button>
+                    <button class="filter-btn" data-filter="recent">Recent</button>
+                    <button class="filter-btn" data-filter="scripture">Scripture Study</button>
+                    <button class="filter-btn" data-filter="planning">Planning</button>
+                    <button class="filter-btn" data-filter="fellowship">Fellowship</button>
                 </div>
             </div>
 
-            <!-- Archives Content (Hidden until login) -->
-            <div id="archives-content" style="display: none;">
-                <div class="section-header">
-                    <h1 class="section-title">Meeting Archives</h1>
-                    <p class="section-subtitle">Brotherhood meeting notes and insights (transcripts private)</p>
-                </div>
+            <!-- Meetings Grid -->
+            <div class="meetings-grid" id="meetingsGrid">
+                <!-- Meetings will be populated here -->
+            </div>
 
-                <div class="card">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search meetings by date, topic, or theme..." id="search-input">
-                    </div>
-
-                    <div class="archive-list" id="archive-list">
-                        <!-- Archives will be loaded here -->
-                    </div>
-                </div>
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <div class="no-results-icon">📁</div>
+                <h3>No meetings found</h3>
+                <p>Try adjusting your search terms or filters.</p>
             </div>
         </div>
-    </div>
+    </main>
 
-    <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/archives.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
+    <script>
+        class ArchivesManager {
+            constructor() {
+                this.meetings = this.loadMeetings();
+                this.filteredMeetings = [...this.meetings];
+                this.currentFilter = 'all';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadSampleMeetings();
+                this.renderMeetings();
+            }
+
+            setupEventListeners() {
+                // Search input
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('input', (e) => {
+                    this.handleSearch(e.target.value);
+                });
+
+                // Filter buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.handleFilter(e.target.dataset.filter);
+                        
+                        // Update active state
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                    });
+                });
+            }
+
+            handleSearch(query) {
+                if (!query.trim()) {
+                    this.filteredMeetings = this.filterByCategory(this.meetings, this.currentFilter);
+                } else {
+                    const searchTerms = query.toLowerCase().split(' ');
+                    this.filteredMeetings = this.meetings.filter(meeting => {
+                        const searchContent = `${meeting.title} ${meeting.summary} ${meeting.tags.join(' ')} ${meeting.scriptureReferences.join(' ')}`.toLowerCase();
+                        return searchTerms.every(term => searchContent.includes(term));
+                    });
+                }
+                this.renderMeetings();
+            }
+
+            handleFilter(filter) {
+                this.currentFilter = filter;
+                const searchQuery = document.getElementById('searchInput').value;
+                
+                if (searchQuery.trim()) {
+                    this.handleSearch(searchQuery);
+                } else {
+                    this.filteredMeetings = this.filterByCategory(this.meetings, filter);
+                    this.renderMeetings();
+                }
+            }
+
+            filterByCategory(meetings, category) {
+                if (category === 'all') return meetings;
+                if (category === 'recent') {
+                    return meetings.slice(0, 5);
+                }
+                return meetings.filter(meeting => meeting.tags.some(tag => 
+                    tag.toLowerCase().includes(category.toLowerCase())
+                ));
+            }
+
+            renderMeetings() {
+                const grid = document.getElementById('meetingsGrid');
+                const noResults = document.getElementById('noResults');
+
+                if (this.filteredMeetings.length === 0) {
+                    grid.style.display = 'none';
+                    noResults.style.display = 'block';
+                    return;
+                }
+
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+
+                grid.innerHTML = this.filteredMeetings.map(meeting => `
+                    <div class="meeting-card" onclick="openMeeting('${meeting.id}')">
+                        <div class="meeting-header">
+                            <h3 class="meeting-title">${meeting.title}</h3>
+                            <div class="meeting-date">${this.formatDate(meeting.date)}</div>
+                            <div class="meeting-stats">
+                                <div class="stat">
+                                    <span class="stat-icon">👥</span>
+                                    <span>${meeting.attendees} attendees</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-icon">⏱️</span>
+                                    <span>${meeting.duration} minutes</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-icon">📖</span>
+                                    <span>${meeting.scriptureReferences.length} scriptures</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="meeting-content">
+                            <p class="meeting-summary">${meeting.summary}</p>
+                            <div class="meeting-tags">
+                                ${meeting.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="meeting-actions">
+                                <a href="meeting.html?id=${meeting.id}" class="action-btn primary" onclick="event.stopPropagation();">View Details</a>
+                                <button class="action-btn" onclick="event.stopPropagation(); viewTranscript('${meeting.id}');">Transcript</button>
+                                <button class="action-btn" onclick="event.stopPropagation(); viewScriptures('${meeting.id}');">Scriptures</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            formatDate(dateString) {
+                return new Date(dateString).toLocaleDateString('en-US', { 
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+
+            loadMeetings() {
+                const saved = localStorage.getItem('wcsc_meeting_archives');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            saveMeetings() {
+                localStorage.setItem('wcsc_meeting_archives', JSON.stringify(this.meetings));
+            }
+
+            loadSampleMeetings() {
+                if (this.meetings.length === 0) {
+                    const sampleMeetings = [
+                        {
+                            id: 'meeting_001',
+                            title: 'Faith and Brotherhood: Building Stronger Connections',
+                            date: '2025-08-25',
+                            attendees: 12,
+                            duration: 90,
+                            summary: 'Discussion on strengthening our bonds as brothers in faith, accountability partnerships, and upcoming community service projects. Key focus on Proverbs 27:17 - "Iron sharpens iron, so one man sharpens another."',
+                            tags: ['Fellowship', 'Accountability', 'Scripture Study', 'Community Service'],
+                            scriptureReferences: ['Proverbs 27:17', 'Ecclesiastes 4:9-12', '1 Thessalonians 5:11'],
+                            hasTranscript: true,
+                            hasNotes: true,
+                            aiAnalysis: 'Key themes: Brotherhood, Mutual Accountability, Service to Others'
+                        },
+                        {
+                            id: 'meeting_002',
+                            title: 'Spiritual Warfare and Modern Challenges',
+                            date: '2025-08-18',
+                            attendees: 15,
+                            duration: 105,
+                            summary: 'Deep dive into Ephesians 6:10-18 discussing spiritual warfare in contemporary society. Practical strategies for maintaining faith in challenging times and supporting each other through trials.',
+                            tags: ['Scripture Study', 'Spiritual Warfare', 'Modern Challenges', 'Prayer'],
+                            scriptureReferences: ['Ephesians 6:10-18', '2 Corinthians 10:3-5', 'James 4:7'],
+                            hasTranscript: true,
+                            hasNotes: true,
+                            aiAnalysis: 'Focus areas: Spiritual preparedness, Prayer strategies, Community support'
+                        },
+                        {
+                            id: 'meeting_003',
+                            title: 'Leadership and Servant Hearts',
+                            date: '2025-08-11',
+                            attendees: 18,
+                            duration: 95,
+                            summary: 'Exploring biblical leadership principles through the example of Christ. How to lead with humility, serve others, and make a positive impact in our communities and families.',
+                            tags: ['Leadership', 'Service', 'Biblical Principles', 'Community Impact'],
+                            scriptureReferences: ['Mark 10:43-44', 'Philippians 2:3-8', '1 Peter 5:2-3'],
+                            hasTranscript: true,
+                            hasNotes: true,
+                            aiAnalysis: 'Core concepts: Servant leadership, Humility in action, Community transformation'
+                        },
+                        {
+                            id: 'meeting_004',
+                            title: 'Planning Q4 Community Outreach',
+                            date: '2025-08-04',
+                            attendees: 14,
+                            duration: 75,
+                            summary: 'Strategic planning session for our fourth quarter community outreach initiatives. Food drives, mentorship programs, and partnership with local organizations discussed.',
+                            tags: ['Planning', 'Community Service', 'Outreach', 'Local Partnerships'],
+                            scriptureReferences: ['Matthew 25:35-40', 'Galatians 6:2', 'Romans 12:13'],
+                            hasTranscript: false,
+                            hasNotes: true,
+                            aiAnalysis: 'Action items: Food drive coordination, Mentorship program launch, Community partnerships'
+                        },
+                        {
+                            id: 'meeting_005',
+                            title: 'Wisdom in Decision Making',
+                            date: '2025-07-28',
+                            attendees: 16,
+                            duration: 85,
+                            summary: 'Study on biblical wisdom and its application in daily decision-making. Practical exercises on discernment, seeking counsel, and trusting God\'s guidance in major life choices.',
+                            tags: ['Scripture Study', 'Wisdom', 'Decision Making', 'Discernment'],
+                            scriptureReferences: ['Proverbs 3:5-6', 'James 1:5', 'Proverbs 19:20'],
+                            hasTranscript: true,
+                            hasNotes: true,
+                            aiAnalysis: 'Key insights: Trust in divine guidance, Value of wise counsel, Practical discernment'
+                        }
+                    ];
+
+                    this.meetings = sampleMeetings;
+                    this.filteredMeetings = [...this.meetings];
+                    this.saveMeetings();
+                }
+            }
+        }
+
+        // Global functions for meeting interactions
+        function openMeeting(meetingId) {
+            window.location.href = `meeting.html?id=${meetingId}`;
+        }
+
+        function viewTranscript(meetingId) {
+            alert(`Opening transcript for meeting ${meetingId} - Feature coming soon!`);
+        }
+
+        function viewScriptures(meetingId) {
+            window.location.href = `scripture.html?from=${meetingId}`;
+        }
+
+        // Initialize archives when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ArchivesManager();
+        });
+    </script>
 </body>
 </html>
