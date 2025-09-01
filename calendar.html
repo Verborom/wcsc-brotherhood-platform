@@ -9,282 +9,545 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
-    <!-- Supabase Integration -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="backend/config/supabase.js"></script>
-</head>
-<body>
-    <nav class="main-nav">
-        <div class="nav-brand">
-            <a href="/">⚔️ WCSC Brotherhood</a>
-        </div>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <div class="member-only" style="display: none;">
-                <a href="/calendar.html" class="active">Calendar</a>
-                <a href="/archives.html">Archives</a>
-                <a href="/scripture.html">Scripture</a>
-            </div>
-        </div>
-        <div class="auth-buttons">
-            <!-- Populated by JavaScript -->
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <div class="container">
-            <div class="calendar-header">
-                <div class="calendar-title">
-                    <h1>📅 Brotherhood Calendar</h1>
-                    <p>Stay connected with our meetings and events</p>
-                </div>
-                <div class="calendar-controls">
-                    <div class="view-controls">
-                        <button class="btn btn-secondary active" data-view="month">Month</button>
-                        <button class="btn btn-secondary" data-view="week">Week</button>
-                        <button class="btn btn-secondary" data-view="day">Day</button>
-                    </div>
-                    <div class="leader-only" style="display: none;">
-                        <button id="add-event-btn" class="btn btn-primary">
-                            <i class="icon-plus"></i> Add Event
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="calendar-navigation">
-                <button id="prev-month" class="btn btn-secondary">‹ Previous</button>
-                <h2 id="current-month-year">Loading...</h2>
-                <button id="next-month" class="btn btn-secondary">Next ›</button>
-                <button id="today-btn" class="btn btn-secondary">Today</button>
-            </div>
-
-            <div class="calendar-container">
-                <div class="calendar-main">
-                    <div id="calendar-grid" class="calendar-grid">
-                        <!-- Calendar will be rendered here -->
-                    </div>
-                </div>
-                <div id="events-sidebar" class="events-sidebar">
-                    <h3>Select a date to view events</h3>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Event Creation Modal -->
-    <div id="event-modal" class="modal" style="display: none;">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Create New Event</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <form id="event-form">
-                <div class="form-group">
-                    <label for="event-title">Event Title *</label>
-                    <input type="text" id="event-title" name="title" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-type">Event Type *</label>
-                    <select id="event-type" name="event_type" required>
-                        <option value="meeting">Meeting</option>
-                        <option value="service">Service</option>
-                        <option value="fellowship">Fellowship</option>
-                        <option value="study">Study</option>
-                    </select>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="event-date">Date *</label>
-                        <input type="date" id="event-date" name="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="event-time">Start Time *</label>
-                        <input type="time" id="event-time" name="time" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="event-end-time">End Time</label>
-                        <input type="time" id="event-end-time" name="end_time">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-location">Location</label>
-                    <input type="text" id="event-location" name="location" placeholder="Meeting location or address">
-                </div>
-                
-                <div class="form-group">
-                    <label for="event-description">Description</label>
-                    <textarea id="event-description" name="description" rows="3" placeholder="Event details, agenda, or special instructions..."></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Event</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Event Details Modal -->
-    <div id="event-details-modal" class="modal" style="display: none;">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <!-- Content populated by JavaScript -->
-        </div>
-    </div>
-
-    <script src="js/main.js"></script>
-    <script src="js/auth-supabase.js"></script>
-    <script src="js/calendar-enhanced.js"></script>
-
     <style>
+        .calendar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .calendar-nav button {
+            background: var(--gold);
+            color: var(--navy);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .month-year {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+        }
+
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 1px;
-            background: var(--border);
+            background: rgba(201, 169, 110, 0.2);
             border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 2rem;
         }
-        
+
         .calendar-day-header {
-            background: var(--card-bg);
-            padding: 0.75rem;
+            background: var(--navy);
+            padding: 1rem;
             text-align: center;
             font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
+            color: var(--gold);
+            font-size: 0.9rem;
         }
-        
+
         .calendar-day {
             background: var(--card-bg);
-            min-height: 100px;
+            min-height: 120px;
             padding: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
             position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        
+
         .calendar-day:hover {
             background: rgba(201, 169, 110, 0.1);
         }
-        
+
         .calendar-day.today {
             background: rgba(201, 169, 110, 0.2);
-        }
-        
-        .calendar-day.selected {
-            background: rgba(201, 169, 110, 0.3);
             border: 2px solid var(--gold);
         }
-        
+
         .calendar-day.other-month {
             opacity: 0.3;
         }
-        
+
+        .calendar-day.has-event {
+            border-left: 4px solid var(--gold);
+        }
+
         .day-number {
             font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
-        
+
         .day-events {
-            margin-top: 0.5rem;
-        }
-        
-        .event-item {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.4rem;
-            margin: 0.1rem 0;
-            border-radius: 3px;
-            cursor: pointer;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .event-item.meeting { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
-        .event-item.service { background: rgba(34, 197, 94, 0.2); color: #86efac; }
-        .event-item.fellowship { background: rgba(168, 85, 247, 0.2); color: #c4b5fd; }
-        .event-item.study { background: rgba(251, 191, 36, 0.2); color: #fcd34d; }
-        
-        .more-events {
-            font-size: 0.6rem;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-        
-        .calendar-container {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .events-sidebar {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 1.5rem;
-            height: fit-content;
-        }
-        
-        .events-sidebar h3 {
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-        
-        .day-events-list {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.25rem;
         }
-        
-        .event-list-item {
-            padding: 0.75rem;
-            border-radius: 8px;
+
+        .event {
+            background: rgba(201, 169, 110, 0.8);
+            color: var(--navy);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
-        .event-list-item:hover {
-            transform: translateX(5px);
+
+        .event:hover {
+            background: var(--gold);
+            transform: scale(1.02);
         }
-        
-        .event-time {
-            font-size: 0.8rem;
+
+        .event.meeting {
+            background: rgba(59, 130, 246, 0.8);
+            color: white;
+        }
+
+        .event.study {
+            background: rgba(16, 185, 129, 0.8);
+            color: white;
+        }
+
+        .event.service {
+            background: rgba(245, 158, 11, 0.8);
+            color: white;
+        }
+
+        .event-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .event-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            color: var(--gold);
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
         }
-        
-        .event-title {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-        
-        .event-location {
-            font-size: 0.8rem;
+
+        .close-modal {
+            background: none;
+            border: none;
             color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
-        
+
+        .close-modal:hover {
+            color: var(--gold);
+        }
+
+        .add-event-form {
+            display: none;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            margin-top: 2rem;
+        }
+
+        .add-event-form.active {
+            display: block;
+        }
+
         @media (max-width: 768px) {
-            .calendar-container {
-                grid-template-columns: 1fr;
-            }
-            
             .calendar-day {
-                min-height: 60px;
+                min-height: 80px;
                 padding: 0.25rem;
             }
-            
-            .event-item {
-                font-size: 0.6rem;
-                padding: 0.1rem 0.2rem;
+
+            .calendar-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .day-number {
+                font-size: 0.9rem;
+            }
+
+            .event {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.3rem;
             }
         }
     </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">⚔️ WCSC Brotherhood</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#principles">Principles</a></li>
+                <li><a href="index.html#pillars">Pillars</a></li>
+                <li><a href="calendar.html" class="active">Calendar</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="scripture.html">Scripture</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="archives.html" class="btn btn-secondary">Archives</a>
+                <a href="scripture.html" class="btn btn-primary">Scripture</a>
+            </div>
+        </div>
+    </nav>
+
+    <main style="padding-top: 100px; min-height: 100vh; background: var(--dark-bg);">
+        <div class="calendar-container">
+            <div class="section-header reveal" style="text-align: center; margin-bottom: 3rem;">
+                <h1 class="section-title">Brotherhood Calendar</h1>
+                <p class="section-subtitle">Stay connected with our meetings, studies, and service opportunities.</p>
+            </div>
+
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button id="prevMonth">‹ Previous</button>
+                    <div class="month-year" id="monthYear"></div>
+                    <button id="nextMonth">Next ›</button>
+                </div>
+                <div>
+                    <button id="todayBtn" class="btn btn-secondary" style="margin-right: 1rem;">Today</button>
+                    <button id="addEventBtn" class="btn btn-primary">Add Event</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar will be generated here -->
+            </div>
+
+            <!-- Add Event Form -->
+            <div class="add-event-form" id="addEventForm">
+                <h3 style="color: var(--gold); margin-bottom: 1.5rem;">Add New Event</h3>
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label>Event Title</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" name="time">
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select name="type" style="width: 100%; padding: 1rem 1.5rem; border: 2px solid rgba(201, 169, 110, 0.2); border-radius: 15px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary);">
+                            <option value="meeting">Brotherhood Meeting</option>
+                            <option value="study">Scripture Study</option>
+                            <option value="service">Community Service</option>
+                            <option value="social">Fellowship</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" rows="3"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">Add Event</button>
+                        <button type="button" id="cancelEvent" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Event Modal -->
+    <div class="event-modal" id="eventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
+    <script>
+        class BrotherhoodCalendar {
+            constructor() {
+                this.currentDate = new Date();
+                this.events = this.loadEvents();
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderCalendar();
+                this.loadDefaultEvents();
+            }
+
+            setupEventListeners() {
+                document.getElementById('prevMonth').addEventListener('click', () => this.previousMonth());
+                document.getElementById('nextMonth').addEventListener('click', () => this.nextMonth());
+                document.getElementById('todayBtn').addEventListener('click', () => this.goToToday());
+                document.getElementById('addEventBtn').addEventListener('click', () => this.showAddEventForm());
+                document.getElementById('cancelEvent').addEventListener('click', () => this.hideAddEventForm());
+                document.getElementById('eventForm').addEventListener('submit', (e) => this.addEvent(e));
+                document.getElementById('closeModal').addEventListener('click', () => this.closeModal());
+                document.getElementById('eventModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'eventModal') this.closeModal();
+                });
+            }
+
+            renderCalendar() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+                
+                document.getElementById('monthYear').textContent = 
+                    this.currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                const grid = document.getElementById('calendarGrid');
+                grid.innerHTML = '';
+
+                const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                dayHeaders.forEach(day => {
+                    const header = document.createElement('div');
+                    header.className = 'calendar-day-header';
+                    header.textContent = day;
+                    grid.appendChild(header);
+                });
+
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDayOfWeek = firstDay.getDay();
+
+                for (let i = 0; i < startingDayOfWeek; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day other-month';
+                    grid.appendChild(emptyDay);
+                }
+
+                const today = new Date();
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    
+                    const currentDayDate = new Date(year, month, day);
+                    const dateString = this.formatDate(currentDayDate);
+                    
+                    if (this.isSameDay(currentDayDate, today)) {
+                        dayElement.classList.add('today');
+                    }
+
+                    const dayNumber = document.createElement('div');
+                    dayNumber.className = 'day-number';
+                    dayNumber.textContent = day;
+                    dayElement.appendChild(dayNumber);
+
+                    const eventsContainer = document.createElement('div');
+                    eventsContainer.className = 'day-events';
+                    
+                    const dayEvents = this.events.filter(event => event.date === dateString);
+                    if (dayEvents.length > 0) {
+                        dayElement.classList.add('has-event');
+                        dayEvents.forEach(event => {
+                            const eventElement = document.createElement('div');
+                            eventElement.className = `event ${event.type}`;
+                            eventElement.textContent = event.title;
+                            eventElement.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                this.showEventModal(event);
+                            });
+                            eventsContainer.appendChild(eventElement);
+                        });
+                    }
+
+                    dayElement.appendChild(eventsContainer);
+                    grid.appendChild(dayElement);
+                }
+            }
+
+            previousMonth() {
+                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                this.renderCalendar();
+            }
+
+            nextMonth() {
+                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                this.renderCalendar();
+            }
+
+            goToToday() {
+                this.currentDate = new Date();
+                this.renderCalendar();
+            }
+
+            showAddEventForm() {
+                const form = document.getElementById('addEventForm');
+                form.classList.add('active');
+                const today = new Date();
+                document.querySelector('input[name="date"]').value = this.formatDate(today);
+            }
+
+            hideAddEventForm() {
+                document.getElementById('addEventForm').classList.remove('active');
+                document.getElementById('eventForm').reset();
+            }
+
+            addEvent(e) {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const event = {
+                    id: Date.now().toString(),
+                    title: formData.get('title'),
+                    date: formData.get('date'),
+                    time: formData.get('time'),
+                    type: formData.get('type'),
+                    description: formData.get('description') || ''
+                };
+
+                this.events.push(event);
+                this.saveEvents();
+                this.renderCalendar();
+                this.hideAddEventForm();
+            }
+
+            showEventModal(event) {
+                document.getElementById('modalTitle').textContent = event.title;
+                
+                const modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+                    <p><strong>Date:</strong> ${new Date(event.date).toLocaleDateString()}</p>
+                    ${event.time ? `<p><strong>Time:</strong> ${event.time}</p>` : ''}
+                    <p><strong>Type:</strong> ${event.type.charAt(0).toUpperCase() + event.type.slice(1)}</p>
+                    ${event.description ? `<p><strong>Description:</strong></p><p>${event.description}</p>` : ''}
+                `;
+                
+                document.getElementById('eventModal').classList.add('active');
+            }
+
+            closeModal() {
+                document.getElementById('eventModal').classList.remove('active');
+            }
+
+            formatDate(date) {
+                return date.toISOString().split('T')[0];
+            }
+
+            isSameDay(date1, date2) {
+                return date1.toDateString() === date2.toDateString();
+            }
+
+            loadEvents() {
+                const saved = localStorage.getItem('wcsc_calendar_events');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            saveEvents() {
+                localStorage.setItem('wcsc_calendar_events', JSON.stringify(this.events));
+            }
+
+            loadDefaultEvents() {
+                if (this.events.length === 0) {
+                    const today = new Date();
+                    const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    const nextMonth = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+                    const defaultEvents = [
+                        {
+                            id: 'default1',
+                            title: 'Weekly Brotherhood Meeting',
+                            date: this.formatDate(nextWeek),
+                            time: '19:00',
+                            type: 'meeting',
+                            description: 'Our regular weekly meeting for fellowship, accountability, and planning.'
+                        },
+                        {
+                            id: 'default2', 
+                            title: 'Scripture Study Group',
+                            date: this.formatDate(new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000)),
+                            time: '18:30',
+                            type: 'study',
+                            description: 'Deep dive into this week\'s scripture package with discussion and practical application.'
+                        },
+                        {
+                            id: 'default3',
+                            title: 'Community Service Project',
+                            date: this.formatDate(nextMonth),
+                            time: '09:00',
+                            type: 'service',
+                            description: 'Volunteer work at local food bank - serving our community together.'
+                        }
+                    ];
+
+                    this.events = defaultEvents;
+                    this.saveEvents();
+                    this.renderCalendar();
+                }
+            }
+        }
+
+        // Initialize calendar when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new BrotherhoodCalendar();
+        });
+    </script>
 </body>
 </html>
