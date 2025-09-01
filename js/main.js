@@ -1,17 +1,18 @@
-// Main JavaScript functionality - Recovery Version
+// Main JavaScript - ENHANCED PARALLAX VERSION
 
 // Ensure DOM is fully loaded before executing any code
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔄 WCSC Brotherhood Platform - Initializing...');
+    console.log('🚀 WCSC Brotherhood Platform - Enhanced Version Loading...');
     
     try {
         initializeBasicFunctionality();
+        initializeParallaxEffects();
         initializeNavigation();
         initializeAnimations();
         initializeContactForm();
         initializeAuthStateChecks();
         
-        console.log('✅ Basic functionality initialized successfully');
+        console.log('✅ Enhanced functionality initialized successfully');
     } catch (error) {
         console.error('❌ Error during initialization:', error);
         // Continue with basic functionality even if some features fail
@@ -27,39 +28,106 @@ function initializeBasicFunctionality() {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                const navHeight = document.querySelector('.navbar').offsetHeight;
+                const targetPosition = target.offsetTop - navHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
                 });
             }
         });
     });
     
     // Create floating particles for hero section
-    createParticles();
+    createEnhancedParticles();
+}
+
+// PARALLAX EFFECTS
+function initializeParallaxEffects() {
+    const parallaxBg = document.querySelector('.parallax-bg');
+    const heroContent = document.querySelector('.hero-content');
+    
+    if (!parallaxBg || !heroContent) return;
+    
+    // Parallax scroll handler
+    function handleParallaxScroll() {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        const contentRate = scrolled * 0.1;
+        
+        // Apply parallax transform
+        parallaxBg.style.transform = `translateY(${rate}px)`;
+        
+        // Subtle content parallax
+        if (scrolled < window.innerHeight) {
+            heroContent.style.transform = `translateY(${contentRate}px)`;
+            heroContent.style.opacity = 1 - (scrolled / window.innerHeight) * 0.8;
+        }
+    }
+    
+    // Use requestAnimationFrame for smooth performance
+    let ticking = false;
+    
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(handleParallaxScroll);
+            ticking = true;
+        }
+    }
+    
+    function endTick() {
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        requestTick();
+        setTimeout(endTick, 16);
+    });
+    
+    // Initial call
+    handleParallaxScroll();
 }
 
 // Navigation functionality
 function initializeNavigation() {
-    // Navbar scroll effect
-    const navbar = document.querySelector('.main-nav');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+    
+    // Navbar scroll effect with enhanced performance
+    let lastScrollTop = 0;
+    let scrollTimer = null;
+    
+    function updateNavbar() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        
+        lastScrollTop = scrollTop;
     }
+    
+    window.addEventListener('scroll', () => {
+        if (scrollTimer !== null) {
+            clearTimeout(scrollTimer);
+        }
+        
+        scrollTimer = setTimeout(updateNavbar, 10);
+    });
+    
+    // Initial call
+    updateNavbar();
 }
 
 // Animation functionality
 function initializeAnimations() {
     try {
-        // Reveal animations on scroll
+        // Enhanced reveal animations on scroll
         const observerOptions = {
-            threshold: 0.1,
+            threshold: [0.1, 0.3],
             rootMargin: '0px 0px -50px 0px'
         };
 
@@ -67,6 +135,13 @@ function initializeAnimations() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('revealed');
+                    
+                    // Add special effects for cards
+                    if (entry.target.classList.contains('card')) {
+                        setTimeout(() => {
+                            entry.target.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
                 }
             });
         }, observerOptions);
@@ -80,60 +155,149 @@ function initializeAnimations() {
         document.querySelectorAll('.grid .reveal').forEach((element, index) => {
             element.style.transitionDelay = `${index * 0.1}s`;
         });
+        
     } catch (error) {
         console.error('Animation initialization error:', error);
+    }
+}
+
+// Enhanced Particle System
+function createEnhancedParticles() {
+    try {
+        const hero = document.querySelector('.parallax-hero');
+        if (!hero) return;
+        
+        let particlesContainer = hero.querySelector('.hero-particles');
+        if (!particlesContainer) {
+            particlesContainer = document.createElement('div');
+            particlesContainer.className = 'hero-particles';
+            hero.appendChild(particlesContainer);
+        }
+
+        // Clear existing particles
+        particlesContainer.innerHTML = '';
+
+        const particleCount = 12;
+        const particles = [];
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 4 + 2;
+            const initialX = Math.random() * 100;
+            const initialY = Math.random() * 100;
+            const animationDelay = Math.random() * 8;
+            const animationDuration = 6 + Math.random() * 4;
+            
+            particle.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                background: var(--gold);
+                border-radius: 50%;
+                opacity: 0.1;
+                top: ${initialY}%;
+                left: ${initialX}%;
+                animation: floatParticles ${animationDuration}s ease-in-out infinite;
+                animation-delay: ${animationDelay}s;
+                pointer-events: none;
+            `;
+            
+            particlesContainer.appendChild(particle);
+            particles.push({
+                element: particle,
+                x: initialX,
+                y: initialY,
+                size: size
+            });
+        }
+        
+        // Add mouse interaction
+        hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
+            const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            particles.forEach((particle, index) => {
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - particle.x, 2) + Math.pow(mouseY - particle.y, 2)
+                );
+                
+                if (distance < 20) {
+                    const angle = Math.atan2(mouseY - particle.y, mouseX - particle.x);
+                    const push = Math.max(0, 20 - distance) * 0.5;
+                    
+                    const newX = particle.x - Math.cos(angle) * push;
+                    const newY = particle.y - Math.sin(angle) * push;
+                    
+                    particle.element.style.transform = `translate(${newX - particle.x}px, ${newY - particle.y}px)`;
+                    particle.element.style.opacity = '0.3';
+                }
+            });
+        });
+        
+    } catch (error) {
+        console.error('Enhanced particle creation error:', error);
     }
 }
 
 // Contact form functionality
 function initializeContactForm() {
     const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const button = this.querySelector('button[type="submit"]');
-            const originalText = button.textContent;
+    if (!contactForm) return;
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const button = this.querySelector('button[type="submit"]');
+        const originalText = button.textContent;
+        
+        try {
+            // Enhanced loading state
+            button.innerHTML = '<span class="loading-spinner"></span> Sending...';
+            button.disabled = true;
+            button.style.opacity = '0.8';
             
-            try {
-                button.innerHTML = '<span class="loading"></span> Sending...';
-                button.disabled = true;
-                
-                // Get form data
-                const formData = new FormData(this);
-                const data = Object.fromEntries(formData);
-                
-                // Try to submit with backend, fallback to email
-                submitContactForm(data)
-                    .then(() => {
-                        button.innerHTML = '✓ Message Sent!';
-                        button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                        
-                        setTimeout(() => {
-                            button.innerHTML = originalText;
-                            button.disabled = false;
-                            button.style.background = '';
-                            this.reset();
-                        }, 3000);
-                    })
-                    .catch((error) => {
-                        console.error('Form submission error:', error);
-                        button.innerHTML = '✓ Received! (Fallback mode)';
-                        button.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
-                        
-                        setTimeout(() => {
-                            button.innerHTML = originalText;
-                            button.disabled = false;
-                            button.style.background = '';
-                            this.reset();
-                        }, 3000);
-                    });
-            } catch (error) {
-                console.error('Contact form error:', error);
-                button.innerHTML = originalText;
-                button.disabled = false;
-            }
-        });
-    }
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Try to submit with backend, fallback to email
+            submitContactForm(data)
+                .then(() => {
+                    button.innerHTML = '✓ Message Sent Successfully!';
+                    button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    button.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                        button.style.background = '';
+                        button.style.opacity = '';
+                        this.reset();
+                    }, 3000);
+                })
+                .catch((error) => {
+                    console.error('Form submission error:', error);
+                    button.innerHTML = '✓ Received! (Contact via Email)';
+                    button.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+                    button.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                        button.style.background = '';
+                        button.style.opacity = '';
+                        this.reset();
+                    }, 3000);
+                });
+        } catch (error) {
+            console.error('Contact form error:', error);
+            button.innerHTML = originalText;
+            button.disabled = false;
+            button.style.opacity = '';
+        }
+    });
 }
 
 // Auth state management
@@ -201,67 +365,6 @@ function updateAuthUI(isAuthenticated) {
     }
 }
 
-// Particle animation for hero section
-function createParticles() {
-    try {
-        const hero = document.querySelector('.hero');
-        if (!hero) return;
-        
-        // Create particles container if it doesn't exist
-        let particlesContainer = hero.querySelector('.hero-particles');
-        if (!particlesContainer) {
-            particlesContainer = document.createElement('div');
-            particlesContainer.className = 'hero-particles';
-            particlesContainer.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 1;
-            `;
-            hero.appendChild(particlesContainer);
-        }
-
-        const particleCount = 8;
-        
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.cssText = `
-                position: absolute;
-                background: var(--gold);
-                border-radius: 50%;
-                opacity: 0.1;
-                animation: float 6s ease-in-out infinite;
-                width: ${Math.random() * 6 + 2}px;
-                height: ${Math.random() * 6 + 2}px;
-                top: ${Math.random() * 100}%;
-                left: ${Math.random() * 100}%;
-                animation-delay: ${Math.random() * 6}s;
-            `;
-            particlesContainer.appendChild(particle);
-        }
-        
-        // Add CSS animation if not already present
-        if (!document.getElementById('particle-animations')) {
-            const style = document.createElement('style');
-            style.id = 'particle-animations';
-            style.textContent = `
-                @keyframes float {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    33% { transform: translateY(-20px) rotate(120deg); }
-                    66% { transform: translateY(20px) rotate(240deg); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-    } catch (error) {
-        console.error('Particle creation error:', error);
-    }
-}
-
 // Contact form submission
 async function submitContactForm(data) {
     try {
@@ -273,7 +376,6 @@ async function submitContactForm(data) {
                     name: data.name,
                     email: data.email,
                     phone: data.phone || null,
-                    chapter_interest: data.chapter_interest || null,
                     message: data.message,
                     created_at: new Date().toISOString()
                 }]);
@@ -288,10 +390,11 @@ async function submitContactForm(data) {
 Name: ${data.name}
 Email: ${data.email}
 Phone: ${data.phone || 'Not provided'}
-Chapter Interest: ${data.chapter_interest || 'Not specified'}
 
 Message:
 ${data.message}
+
+-- Sent from WCSC Brotherhood Platform
         `);
         
         window.open(`mailto:joe.lafilm@gmail.com?subject=${subject}&body=${body}`);
@@ -315,6 +418,15 @@ function hideLoading(element, originalText) {
     if (element) {
         element.innerHTML = originalText;
         element.disabled = false;
+    }
+}
+
+// Performance monitoring
+function logPerformance() {
+    if (window.performance && window.performance.timing) {
+        const timing = window.performance.timing;
+        const loadTime = timing.loadEventEnd - timing.navigationStart;
+        console.log(`🚀 Page loaded in ${loadTime}ms`);
     }
 }
 
@@ -355,6 +467,16 @@ const API = {
     }
 };
 
+// Page loaded callback
+window.addEventListener('load', () => {
+    logPerformance();
+    
+    // Final initialization
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 100);
+});
+
 // Export for other modules
 if (typeof window !== 'undefined') {
     window.WCSC = {
@@ -363,6 +485,8 @@ if (typeof window !== 'undefined') {
         updateAuthUI,
         submitContactForm,
         showLoading,
-        hideLoading
+        hideLoading,
+        initializeParallaxEffects,
+        createEnhancedParticles
     };
 }
