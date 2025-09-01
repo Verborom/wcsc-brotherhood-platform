@@ -82,6 +82,110 @@
     gap: 1rem;
 }
 
+/* PROFILE DROPDOWN */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(201, 169, 110, 0.1);
+    border: 2px solid rgba(201, 169, 110, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    color: var(--gold);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.profile-btn:hover {
+    background: rgba(201, 169, 110, 0.2);
+    border-color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.profile-name {
+    font-size: 0.9rem;
+}
+
+.dropdown-arrow {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+
+.profile-dropdown.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.profile-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 15px;
+    padding: 1rem 0;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.profile-dropdown.active .profile-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.profile-menu a,
+.profile-menu button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.profile-menu a:hover,
+.profile-menu button:hover {
+    background: rgba(201, 169, 110, 0.1);
+    color: var(--gold);
+}
+
+.menu-divider {
+    height: 1px;
+    background: rgba(201, 169, 110, 0.2);
+    margin: 0.5rem 1rem;
+}
+
 /* Buttons */
 .btn {
     padding: 0.75rem 2rem;
@@ -307,7 +411,8 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 1rem 1.5rem;
     border: 2px solid rgba(201, 169, 110, 0.2);
@@ -319,11 +424,35 @@
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--gold);
     box-shadow: 0 0 20px rgba(201, 169, 110, 0.2);
     background: rgba(255, 255, 255, 0.08);
+}
+
+/* Admin Upload Button */
+.admin-upload-btn {
+    position: fixed;
+    top: 120px;
+    right: 2rem;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(201, 169, 110, 0.3);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.admin-upload-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 30px rgba(201, 169, 110, 0.5);
 }
 
 /* Particles */
@@ -411,6 +540,17 @@
     .parallax-bg {
         width: 100%;
         height: 100%;
+    }
+
+    .profile-menu {
+        right: -50px;
+        min-width: 180px;
+    }
+
+    .admin-upload-btn {
+        bottom: 2rem;
+        top: auto;
+        right: 1rem;
     }
 }
 
