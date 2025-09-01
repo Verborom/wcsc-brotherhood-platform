@@ -34,7 +34,6 @@ function initializeSupabase() {
         // Export to global scope for other scripts
         if (typeof window !== 'undefined') {
             window.supabaseClient = supabaseClient;
-            window.supabase = supabaseClient; // Also provide as window.supabase for consistency
             window.isSupabaseAvailable = isSupabaseAvailable;
         }
 
@@ -88,11 +87,6 @@ const SafeSupabase = {
     // Check if Supabase is available
     isAvailable() {
         return isSupabaseAvailable && supabaseClient !== null;
-    },
-
-    // Get the client
-    getClient() {
-        return supabaseClient;
     },
 
     // Safe authentication check
