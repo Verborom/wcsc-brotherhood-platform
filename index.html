@@ -9,27 +9,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
-    <!-- Supabase Integration -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="backend/config/supabase.js"></script>
+    
+    <!-- Error handling and loading indicator -->
+    <style>
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+            z-index: 9999;
+            transform: translateX(-100%);
+            animation: loading 3s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .error-boundary {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #ef4444;
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="loading-indicator"></div>
+    
+    <!-- Error boundary -->
+    <div id="error-boundary" class="error-boundary">
+        <strong>⚠️ Some features may be temporarily unavailable.</strong>
+        The site is running in safe mode with core functionality enabled.
+    </div>
+
     <!-- Navigation -->
     <nav class="main-nav">
-        <div class="nav-brand">
-            <a href="/">⚔️ WCSC Brotherhood</a>
-        </div>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <div class="member-only" style="display: none;">
-                <a href="/calendar.html">Calendar</a>
-                <a href="/archives.html">Archives</a>
-                <a href="/scripture.html">Scripture</a>
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">⚔️ WCSC Brotherhood</a>
             </div>
-        </div>
-        <div class="auth-buttons">
-            <div class="guest-only">
-                <a href="/login.html" class="btn btn-primary">Member Login</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <div class="member-only" style="display: none;">
+                    <a href="/calendar.html">Calendar</a>
+                    <a href="/archives.html">Archives</a>
+                    <a href="/scripture.html">Scripture</a>
+                </div>
+            </div>
+            <div class="auth-buttons">
+                <div class="guest-only">
+                    <a href="/login.html" class="btn btn-primary">Member Login</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -301,8 +340,30 @@
         </div>
     </footer>
 
+    <!-- Scripts in proper loading order -->
+    <script>
+        // Global error handler
+        window.addEventListener('error', function(e) {
+            console.error('Script error:', e.error);
+            document.getElementById('error-boundary').style.display = 'block';
+        });
+        
+        // Hide loading indicator when page loads
+        window.addEventListener('load', function() {
+            const indicator = document.getElementById('loading-indicator');
+            if (indicator) {
+                indicator.style.display = 'none';
+            }
+        });
+    </script>
+    
+    <!-- Supabase Integration -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
+    <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
+    
+    <!-- Main functionality -->
     <script src="js/main.js"></script>
-    <script src="js/auth-supabase.js"></script>
-    <script src="js/contact-enhanced.js"></script>
+    <script src="js/auth-supabase.js" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
+    <script src="js/contact-enhanced.js" onerror="console.warn('Enhanced contact script failed to load - basic contact form available')"></script>
 </body>
 </html>
