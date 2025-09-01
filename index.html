@@ -3,441 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WCSC Brotherhood Platform - Iron Sharpens Iron</title>
+    <title>Warrior Class Soldier Clan - Judeo-Christian Brotherhood</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Force cache refresh with timestamp -->
-    <link rel="stylesheet" href="css/main.css?v=20250901-001">
-    <link rel="stylesheet" href="css/components.css?v=20250901-001">
-    
-    <!-- Error handling and loading indicator -->
-    <style>
-        .loading-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold, #c9a96e) 0%, var(--gold-light, #d4b377) 100%);
-            z-index: 9999;
-            transform: translateX(-100%);
-            animation: loading 3s ease-in-out infinite;
-        }
-        
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            50% { transform: translateX(100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .error-boundary {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            color: #ef4444;
-            display: none;
-        }
-        
-        /* Fallback styling if main CSS doesn't load */
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0a0e13;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        
-        .main-nav {
-            background: rgba(10, 14, 19, 0.95);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, #0a0e13 0%, #0f1419 50%, #1e2936 100%);
-            padding-top: 80px;
-            text-align: center;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css?v=original">
+    <link rel="stylesheet" href="css/components.css?v=original">
 </head>
 <body>
-    <!-- Loading indicator -->
-    <div id="loading-indicator" class="loading-indicator"></div>
-    
-    <!-- Error boundary -->
-    <div id="error-boundary" class="error-boundary">
-        <strong>⚠️ Some features may be temporarily unavailable.</strong>
-        The site is running in safe mode with core functionality enabled.
-    </div>
-
-    <!-- Navigation -->
-    <nav class="main-nav">
-        <div class="container">
-            <div class="nav-brand">
-                <a href="/">⚔️ WCSC Brotherhood</a>
-            </div>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <div class="member-only" style="display: none;">
-                    <a href="/calendar.html">Calendar</a>
-                    <a href="/archives.html">Archives</a>
-                    <a href="/scripture.html">Scripture</a>
-                </div>
-            </div>
+    <!-- Navigation - ORIGINAL DESIGN -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">⚔️ WCSC</a>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#principles">Principles</a></li>
+                <li><a href="#pillars">Pillars</a></li>
+                <li class="member-only" style="display: none;"><a href="calendar.html">Calendar</a></li>
+                <li class="member-only" style="display: none;"><a href="archives.html">Archives</a></li>
+                <li class="member-only" style="display: none;"><a href="scripture.html">Scripture</a></li>
+            </ul>
             <div class="auth-buttons">
                 <div class="guest-only">
-                    <a href="/login.html" class="btn btn-primary">Member Login</a>
+                    <a href="login.html" class="btn btn-secondary">Member Login</a>
+                    <a href="#contact" class="btn btn-primary">Contact</a>
+                </div>
+                <div class="member-only" style="display: none;">
+                    <a href="calendar.html" class="btn btn-secondary">Calendar</a>
+                    <a href="#contact" class="btn btn-primary">Contact</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background"></div>
+    <!-- Hero Section - ORIGINAL DESIGN -->
+    <section class="hero" id="home">
+        <div class="hero-particles"></div>
+        <div class="hero-content">
+            <h1>Warrior Class Soldier Clan</h1>
+            <p class="hero-subtitle">Judeo-Christian Brotherhood & Fraternity</p>
+            <p class="hero-tagline">"Iron Sharpens Iron" - Proverbs 27:17</p>
+            <div class="hero-buttons">
+                <a href="#about" class="btn btn-primary">Discover Our Mission</a>
+                <a href="#contact" class="btn btn-secondary">Join the Brotherhood</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section - ORIGINAL DESIGN -->
+    <section class="section" id="about">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="hero-subtitle">Warrior Class Soldier Clan</span>
-                    <span class="hero-main">Iron Sharpens Iron</span>
-                </h1>
-                <p class="hero-description">
-                    A brotherhood of men committed to Judeo-Christian values, spiritual growth, and mutual accountability. Join us in building stronger faith, deeper fellowship, and purposeful service.
-                </p>
-                <div class="hero-actions">
-                    <div class="guest-only">
-                        <a href="/login.html" class="btn btn-primary btn-large">
-                            Join the Brotherhood
-                        </a>
-                        <a href="#about" class="btn btn-secondary btn-large">
-                            Learn More
-                        </a>
-                    </div>
-                    <div class="member-only" style="display: none;">
-                        <a href="/calendar.html" class="btn btn-primary btn-large">
-                            View Calendar
-                        </a>
-                        <a href="/scripture.html" class="btn btn-secondary btn-large">
-                            Today's Scripture
-                        </a>
-                    </div>
+            <div class="section-header reveal">
+                <h2 class="section-title">Our Mission</h2>
+                <p class="section-subtitle">To lift each other up and empower one another; to support and enable; to connect and elevate; to be the iron that sharpens iron while serving our communities and being a light for others.</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card reveal">
+                    <span class="card-icon">🎯</span>
+                    <h3>Our Vision</h3>
+                    <p>A nationwide movement of team-oriented improvement for ourselves and each other, fostering a stronger generation and posterity.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🛡️</span>
+                    <h3>Our Foundation</h3>
+                    <p>Built on timeless Judeo-Christian values and principles, welcoming men from diverse backgrounds who align with our mission and values.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section">
+    <!-- Core Principles - ORIGINAL DESIGN -->
+    <section class="section featured-section" id="principles">
         <div class="container">
-            <div class="section-header">
-                <h2>Our Mission & Vision</h2>
-                <p>Building a brotherhood that transforms hearts, strengthens faith, and serves community</p>
+            <div class="section-header reveal">
+                <h2 class="section-title">Core Principles</h2>
+                <p class="section-subtitle">Guided by timeless Judeo-Christian values, including integrity, humility, courage, compassion, and stewardship.</p>
             </div>
-            <div class="mission-grid">
-                <div class="mission-card">
-                    <div class="mission-icon">💪</div>
-                    <h3>Spiritual Strength</h3>
-                    <p>Developing deep, authentic faith through study, prayer, and accountability in community with fellow believers.</p>
+            
+            <div class="grid grid-4">
+                <div class="card reveal">
+                    <span class="card-icon">✡️</span>
+                    <h3>Faith as Foundation</h3>
+                    <p>All actions and decisions are rooted in relationship with the Almighty, promoting prayer, scripture study, and moral accountability.</p>
                 </div>
-                <div class="mission-card">
-                    <div class="mission-icon">🤝</div>
-                    <h3>Brotherhood Support</h3>
-                    <p>Creating lasting bonds of mutual support, encouragement, and accountability among men of faith.</p>
+                <div class="card reveal">
+                    <span class="card-icon">🤝</span>
+                    <h3>Brotherly Love</h3>
+                    <p>Treat others as family, offering forgiveness, encouragement, and accountability when needed to foster growth.</p>
                 </div>
-                <div class="mission-card">
-                    <div class="mission-icon">⚙️</div>
+                <div class="card reveal">
+                    <span class="card-icon">🙏</span>
+                    <h3>Service Over Self</h3>
+                    <p>Prioritize helping others, reflecting the example of servant leadership found in our sacred texts.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">⚖️</span>
+                    <h3>Defense of Truth</h3>
+                    <p>Stand firm against moral relativism and cultural decay, promoting Western civilization's Judeo-Christian heritage.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">💪</span>
+                    <h3>Personal Responsibility</h3>
+                    <p>Each member is accountable for their growth, family, and community, rejecting dependency on external forces.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🌟</span>
+                    <h3>Excellence in All Things</h3>
+                    <p>Strive for physical, mental, spiritual, and professional excellence, as we are called to honor God in our efforts.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">📚</span>
+                    <h3>Continuous Learning</h3>
+                    <p>Pursue spiritual growth and practical skills that benefit ourselves and others, embracing lifelong learning beyond formal education.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">⚡</span>
+                    <h3>Preparedness</h3>
+                    <p>Maintain readiness in all aspects of life - spiritual, physical, and practical - to serve effectively in times of need.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Four Pillars - ORIGINAL DESIGN -->
+    <section class="section" id="pillars">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Four Pillars of Support</h2>
+                <p class="section-subtitle">The foundational elements that make our brotherhood powerful, effective, and meaningful.</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card reveal">
+                    <span class="card-icon">✝️</span>
+                    <h3>Relationship with God</h3>
+                    <p>Our primary foundation - developing and maintaining a deep, personal relationship with the Almighty through prayer, scripture study, and faithful living.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🏋️</span>
+                    <h3>Self-Improvement</h3>
+                    <p>Personal growth through discipline, research, and action in physical, mental, and spiritual health. Including fitness challenges, skill-building workshops, and spiritual study.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🤝</span>
+                    <h3>Clan Support</h3>
+                    <p>Mutual aid, encouragement, and resources to build each other up through mentorship programs, emergency assistance funds, and peer accountability groups.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🏘️</span>
                     <h3>Community Action</h3>
-                    <p>Channeling our faith into meaningful service and positive impact in our local communities.</p>
-                </div>
-                <div class="mission-card">
-                    <div class="mission-icon">🕊</div>
-                    <h3>Calm Support</h3>
-                    <p>Providing steady, reliable support during life's challenges and celebrating victories together.</p>
+                    <p>Active service and advocacy to improve local areas, focusing on volunteerism, advocacy for constitutional values, and local problem-solving.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="section section-features">
+    <!-- Contact Section - ORIGINAL DESIGN WITH BACKEND -->
+    <section class="section featured-section" id="contact">
         <div class="container">
-            <div class="section-header">
-                <h2>Platform Features</h2>
-                <p>Digital tools designed to strengthen brotherhood and enhance spiritual growth</p>
+            <div class="section-header reveal">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">Ready to begin your journey with the brotherhood?</p>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📅</div>
-                    <h3>Interactive Calendar</h3>
-                    <p>Stay connected with weekly meetings, service opportunities, and fellowship events. Never miss what matters.</p>
-                    <div class="member-only" style="display: none;">
-                        <a href="/calendar.html" class="feature-link">View Calendar →</a>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <h3>Meeting Archives</h3>
-                    <p>Access searchable meeting notes, insights, and discussion highlights. Build on previous conversations.</p>
-                    <div class="member-only" style="display: none;">
-                        <a href="/archives.html" class="feature-link">Browse Archives →</a>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📖</div>
-                    <h3>Scripture Study</h3>
-                    <p>Enhanced biblical study with original language analysis, reflection questions, and progress tracking.</p>
-                    <div class="member-only" style="display: none;">
-                        <a href="/scripture.html" class="feature-link">Study Scripture →</a>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3>AI-Enhanced Learning</h3>
-                    <p>Meeting insights transformed into personalized scripture packages with Hebrew, Greek, and Aramaic analysis.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Chapters Section -->
-    <section class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our Chapters</h2>
-                <p>Find a brotherhood community near you</p>
-            </div>
-            <div class="chapters-grid">
-                <div class="chapter-card">
-                    <h3>Georgetown</h3>
-                    <p class="chapter-location">📍 Georgetown, Texas</p>
-                    <p class="chapter-schedule">🕰️ Fridays at 7:00 PM</p>
-                    <p class="chapter-description">Our founding chapter, meeting weekly for fellowship, study, and community service.</p>
-                </div>
-                <div class="chapter-card">
-                    <h3>Austin</h3>
-                    <p class="chapter-location">📍 Austin, Texas</p>
-                    <p class="chapter-schedule">🕰️ Fridays at 7:30 PM</p>
-                    <p class="chapter-description">Growing community focused on young professionals and family men.</p>
-                </div>
-                <div class="chapter-card">
-                    <h3>Dallas</h3>
-                    <p class="chapter-location">📍 Dallas, Texas</p>
-                    <p class="chapter-schedule">🕰️ Fridays at 7:00 PM</p>
-                    <p class="chapter-description">Active in community outreach and mentorship programs.</p>
-                </div>
-                <div class="chapter-card">
-                    <h3>Houston</h3>
-                    <p class="chapter-location">📍 Houston, Texas</p>
-                    <p class="chapter-schedule">🕰️ Fridays at 7:30 PM</p>
-                    <p class="chapter-description">Diverse community with strong emphasis on service and evangelism.</p>
-                </div>
-                <div class="chapter-card">
-                    <h3>San Antonio</h3>
-                    <p class="chapter-location">📍 San Antonio, Texas</p>
-                    <p class="chapter-schedule">🕰️ Fridays at 7:00 PM</p>
-                    <p class="chapter-description">Welcoming community with focus on family values and mentorship.</p>
-                </div>
-                <div class="chapter-card new-chapter">
-                    <h3>Start a Chapter</h3>
-                    <p class="chapter-description">Interested in bringing WCSC Brotherhood to your area? We're always looking to expand our community of faith.</p>
-                    <a href="#contact" class="chapter-link">Learn More →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section section-contact">
-        <div class="container">
-            <div class="section-header">
-                <h2>Get Connected</h2>
-                <p>Ready to join the brotherhood? Have questions? We'd love to hear from you.</p>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Why Join WCSC?</h3>
-                    <ul class="benefits-list">
-                        <li><strong>Authentic Fellowship:</strong> Real relationships with men who share your values</li>
-                        <li><strong>Spiritual Growth:</strong> Weekly study and accountability partnerships</li>
-                        <li><strong>Community Service:</strong> Meaningful opportunities to make a difference</li>
-                        <li><strong>Life Support:</strong> Brothers who stand with you through all seasons</li>
-                        <li><strong>Family Focus:</strong> Support for marriage, parenting, and family life</li>
-                        <li><strong>Professional Network:</strong> Connect with like-minded professionals</li>
-                    </ul>
-                    <div class="contact-direct">
-                        <h4>Direct Contact</h4>
-                        <p><strong>Leadership Email:</strong> joe.lafilm@gmail.com</p>
-                        <p><strong>Response Time:</strong> Within 24 hours</p>
-                    </div>
-                </div>
-                <div class="contact-form">
+            
+            <div class="container" style="max-width: 600px;">
+                <div class="modern-form reveal">
+                    <h3 style="margin-bottom: 2rem; color: var(--gold); text-align: center;">Get in Touch</h3>
                     <form id="contact-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contact-name">Full Name *</label>
-                                <input type="text" id="contact-name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-email">Email Address *</label>
-                                <input type="email" id="contact-email" name="email" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contact-phone">Phone Number</label>
-                                <input type="tel" id="contact-phone" name="phone">
-                            </div>
-                            <div class="form-group">
-                                <label for="chapter-interest">Chapter Interest</label>
-                                <select id="chapter-interest" name="chapter_interest">
-                                    <option value="">Select a Chapter</option>
-                                    <option value="Georgetown">Georgetown</option>
-                                    <option value="Austin">Austin</option>
-                                    <option value="Dallas">Dallas</option>
-                                    <option value="Houston">Houston</option>
-                                    <option value="San Antonio">San Antonio</option>
-                                    <option value="New Chapter">Start New Chapter</option>
-                                    <option value="General">General Inquiry</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="contact-message">Message *</label>
-                            <textarea id="contact-message" name="message" rows="5" 
-                                placeholder="Tell us about yourself, your faith journey, or any questions you have about joining the brotherhood..." required></textarea>
+                            <label>Email</label>
+                            <input type="email" name="email" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-large">
-                            Send Message
-                        </button>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea name="message" rows="5" placeholder="Tell us about yourself and your interest in the brotherhood..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
                     </form>
-                    
-                    <div id="chapter-info" class="chapter-info" style="display: none;">
-                        <!-- Chapter details will be populated here -->
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>⚔️ WCSC Brotherhood</h3>
-                    <p>"As iron sharpens iron, so one man sharpens another." - Proverbs 27:17</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Platform</h4>
-                        <a href="/">Home</a>
-                        <div class="member-only" style="display: none;">
-                            <a href="/calendar.html">Calendar</a>
-                            <a href="/archives.html">Archives</a>
-                            <a href="/scripture.html">Scripture</a>
-                        </div>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Chapters</h4>
-                        <a href="#contact">Georgetown</a>
-                        <a href="#contact">Austin</a>
-                        <a href="#contact">Dallas</a>
-                        <a href="#contact">Houston</a>
-                        <a href="#contact">San Antonio</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Connect</h4>
-                        <a href="#contact">Join Brotherhood</a>
-                        <a href="#contact">Start Chapter</a>
-                        <a href="mailto:joe.lafilm@gmail.com">Contact Leadership</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 WCSC Brotherhood Platform. Built for spiritual growth and community.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts in proper loading order -->
-    <script>
-        // Global error handler
-        window.addEventListener('error', function(e) {
-            console.error('Script error:', e.error);
-            const errorBoundary = document.getElementById('error-boundary');
-            if (errorBoundary) {
-                errorBoundary.style.display = 'block';
-            }
-        });
-        
-        // CSS loading check
-        function checkCSSLoaded() {
-            const testElement = document.querySelector('.hero');
-            if (testElement) {
-                const computedStyle = window.getComputedStyle(testElement);
-                const bgColor = computedStyle.backgroundColor;
-                
-                // If the background isn't styled, CSS didn't load properly
-                if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
-                    console.warn('Main CSS may not have loaded properly');
-                    const errorBoundary = document.getElementById('error-boundary');
-                    if (errorBoundary) {
-                        errorBoundary.innerHTML = '<strong>⚠️ Styling may be incomplete due to network issues.</strong> Content is still fully functional.';
-                        errorBoundary.style.display = 'block';
-                    }
-                } else {
-                    console.log('✅ CSS loaded successfully');
-                }
-            }
-        }
-        
-        // Hide loading indicator when page loads
-        window.addEventListener('load', function() {
-            const indicator = document.getElementById('loading-indicator');
-            if (indicator) {
-                indicator.style.display = 'none';
-            }
-            
-            // Check if CSS loaded properly
-            setTimeout(checkCSSLoaded, 100);
-        });
-        
-        // Force hard refresh function (for testing)
-        function forceRefresh() {
-            window.location.reload(true);
-        }
-        
-        // Debug info
-        console.log('🔄 WCSC Brotherhood Platform - Page Loading...');
-        console.log('📍 Current URL:', window.location.href);
-        console.log('🕐 Load time:', new Date().toISOString());
-    </script>
-    
-    <!-- Supabase Integration -->
+    <!-- Scripts - KEEP ALL BACKEND FUNCTIONALITY -->
     <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
-    <script src="backend/config/supabase.js?v=20250901-001" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
-    
-    <!-- Main functionality -->
-    <script src="js/main.js?v=20250901-001"></script>
-    <script src="js/auth-supabase.js?v=20250901-001" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
-    <script src="js/contact-enhanced.js?v=20250901-001" onerror="console.warn('Enhanced contact script failed to load - basic contact form available')"></script>
+    <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth-supabase.js" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
+    <script src="js/contact-enhanced.js" onerror="console.warn('Enhanced contact script failed to load - basic contact form available')"></script>
 </body>
 </html>
