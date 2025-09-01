@@ -209,6 +209,144 @@
             margin-bottom: 1rem;
         }
 
+        /* UPLOAD MODAL */
+        .upload-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--gold);
+        }
+
+        .upload-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .file-upload-area {
+            border: 2px dashed rgba(201, 169, 110, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--gold);
+            background: rgba(201, 169, 110, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--gold);
+            background: rgba(201, 169, 110, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(201, 169, 110, 0.1);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-type-icon {
+            color: var(--gold);
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .remove-file:hover {
+            opacity: 0.7;
+        }
+
         @media (max-width: 768px) {
             .search-bar {
                 flex-direction: column;
@@ -235,6 +373,15 @@
             .action-btn {
                 text-align: center;
             }
+
+            .modal-content {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .upload-form .form-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -242,22 +389,36 @@
     <!-- Navigation -->
     <nav class="navbar scrolled" id="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo">⚔️ WCSC Brotherhood</a>
+            <a href="dashboard.html" class="logo">⚔️ WCSC Brotherhood</a>
             <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#principles">Principles</a></li>
-                <li><a href="index.html#pillars">Pillars</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="calendar.html">Calendar</a></li>
                 <li><a href="archives.html" class="active">Archives</a></li>
                 <li><a href="scripture.html">Scripture</a></li>
             </ul>
             <div class="auth-buttons">
-                <a href="calendar.html" class="btn btn-secondary">Calendar</a>
-                <a href="scripture.html" class="btn btn-primary">Scripture</a>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="profile-btn" id="profileButton">
+                        <span class="profile-avatar" id="profileAvatar">👤</span>
+                        <span class="profile-name" id="profileName">Member</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <a href="dashboard.html">🏠 Dashboard</a>
+                        <a href="profile.html">👤 My Profile</a>
+                        <a href="account.html">⚙️ My Account</a>
+                        <div class="menu-divider"></div>
+                        <button onclick="logoutUser()">🚪 Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- ADMIN UPLOAD BUTTON (Only visible to admin users) -->
+    <button class="admin-upload-btn" id="adminUploadBtn" onclick="showUploadModal()" style="display: none;">
+        ➕
+    </button>
 
     <main style="padding-top: 100px; min-height: 100vh; background: var(--dark-bg);">
         <div class="archives-container">
@@ -292,6 +453,73 @@
         </div>
     </main>
 
+    <!-- UPLOAD MODAL -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload Meeting Materials</h3>
+                <button class="close-modal" onclick="closeUploadModal()">&times;</button>
+            </div>
+            <form class="upload-form" id="uploadForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Meeting Title</label>
+                        <input type="text" name="title" required placeholder="e.g., Faith and Brotherhood Discussion">
+                    </div>
+                    <div class="form-group">
+                        <label>Meeting Date</label>
+                        <input type="date" name="date" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Attendees</label>
+                        <input type="number" name="attendees" min="1" required placeholder="12">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (minutes)</label>
+                        <input type="number" name="duration" min="1" required placeholder="90">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Meeting Summary</label>
+                    <textarea name="summary" rows="4" required placeholder="Brief description of meeting topics and key discussions..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Scripture References (comma separated)</label>
+                    <input type="text" name="scriptures" placeholder="Proverbs 27:17, Ecclesiastes 4:9-12, 1 Thessalonians 5:11">
+                </div>
+
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" name="tags" placeholder="Fellowship, Scripture Study, Community Service">
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Files</label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">Drag and drop files here</div>
+                        <div class="upload-hint">or click to browse (Meeting notes, transcripts, audio, etc.)</div>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.txt,.mp3,.mp4,.wav" style="display: none;">
+                    </div>
+                    <ul class="file-list" id="fileList"></ul>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Upload Meeting</span>
+                        <span class="loading-spinner" style="display: none;"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="backend/config/supabase.js"></script>
     <script>
@@ -300,13 +528,96 @@
                 this.meetings = this.loadMeetings();
                 this.filteredMeetings = [...this.meetings];
                 this.currentFilter = 'all';
+                this.selectedFiles = [];
+                this.supabase = window.supabase || null;
+                this.user = null;
                 this.init();
             }
 
-            init() {
+            async init() {
+                await this.checkAuth();
                 this.setupEventListeners();
                 this.loadSampleMeetings();
                 this.renderMeetings();
+                this.setupFileUpload();
+                this.checkAdminAccess();
+            }
+
+            async checkAuth() {
+                if (this.supabase) {
+                    try {
+                        const { data: { user } } = await this.supabase.auth.getUser();
+                        if (!user) {
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        this.user = user;
+                    } catch (error) {
+                        console.error('Auth check failed:', error);
+                        window.location.href = 'login.html';
+                    }
+                } else {
+                    // Fallback for demo
+                    const userData = localStorage.getItem('wcsc_current_user');
+                    if (!userData) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    this.user = JSON.parse(userData);
+                }
+
+                // Update profile display
+                this.updateProfileDisplay();
+                this.setupProfileDropdown();
+            }
+
+            updateProfileDisplay() {
+                const profileName = document.getElementById('profileName');
+                const profileAvatar = document.getElementById('profileAvatar');
+
+                if (this.supabase && this.user.user_metadata) {
+                    const firstName = this.user.user_metadata.firstName || 'Brother';
+                    profileName.textContent = firstName;
+                    profileAvatar.textContent = firstName.charAt(0).toUpperCase();
+                } else if (this.user.firstName) {
+                    profileName.textContent = this.user.firstName;
+                    profileAvatar.textContent = this.user.firstName.charAt(0).toUpperCase();
+                }
+            }
+
+            setupProfileDropdown() {
+                const profileButton = document.getElementById('profileButton');
+                const profileDropdown = document.getElementById('profileDropdown');
+
+                profileButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    profileDropdown.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.remove('active');
+                    }
+                });
+            }
+
+            checkAdminAccess() {
+                // Check if user is admin (you or Eitan)
+                const adminEmails = [
+                    'joe.lafilm@gmail.com', // Your email
+                    'eitan@example.com'     // Eitan's email - UPDATE THIS
+                ];
+
+                let userEmail = '';
+                if (this.supabase && this.user.email) {
+                    userEmail = this.user.email;
+                } else if (this.user.email) {
+                    userEmail = this.user.email;
+                }
+
+                if (adminEmails.includes(userEmail)) {
+                    document.getElementById('adminUploadBtn').style.display = 'block';
+                }
             }
 
             setupEventListeners() {
@@ -326,6 +637,149 @@
                         e.target.classList.add('active');
                     });
                 });
+
+                // Upload form
+                document.getElementById('uploadForm').addEventListener('submit', (e) => this.handleUpload(e));
+            }
+
+            setupFileUpload() {
+                const uploadArea = document.getElementById('fileUploadArea');
+                const fileInput = document.getElementById('fileInput');
+
+                // Click to browse files
+                uploadArea.addEventListener('click', () => fileInput.click());
+
+                // File input change
+                fileInput.addEventListener('change', (e) => {
+                    this.addFiles(Array.from(e.target.files));
+                });
+
+                // Drag and drop
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    this.addFiles(Array.from(e.dataTransfer.files));
+                });
+            }
+
+            addFiles(files) {
+                files.forEach(file => {
+                    if (!this.selectedFiles.find(f => f.name === file.name)) {
+                        this.selectedFiles.push(file);
+                    }
+                });
+                this.renderFileList();
+            }
+
+            removeFile(fileName) {
+                this.selectedFiles = this.selectedFiles.filter(f => f.name !== fileName);
+                this.renderFileList();
+            }
+
+            renderFileList() {
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = this.selectedFiles.map(file => `
+                    <li class="file-item">
+                        <div class="file-info">
+                            <span class="file-type-icon">${this.getFileIcon(file.name)}</span>
+                            <span>${file.name}</span>
+                        </div>
+                        <button type="button" class="remove-file" onclick="archivesManager.removeFile('${file.name}')">&times;</button>
+                    </li>
+                `).join('');
+            }
+
+            getFileIcon(fileName) {
+                const ext = fileName.split('.').pop().toLowerCase();
+                const icons = {
+                    pdf: '📄',
+                    docx: '📝',
+                    doc: '📝',
+                    txt: '📄',
+                    mp3: '🎵',
+                    wav: '🎵',
+                    mp4: '🎥',
+                    avi: '🎥',
+                    mov: '🎥'
+                };
+                return icons[ext] || '📁';
+            }
+
+            async handleUpload(e) {
+                e.preventDefault();
+                this.setUploadLoading(true);
+
+                try {
+                    const formData = new FormData(e.target);
+                    
+                    const meetingData = {
+                        id: 'meeting_' + Date.now(),
+                        title: formData.get('title'),
+                        date: formData.get('date'),
+                        attendees: parseInt(formData.get('attendees')),
+                        duration: parseInt(formData.get('duration')),
+                        summary: formData.get('summary'),
+                        scriptureReferences: formData.get('scriptures') ? 
+                            formData.get('scriptures').split(',').map(s => s.trim()).filter(s => s) : [],
+                        tags: formData.get('tags') ? 
+                            formData.get('tags').split(',').map(t => t.trim()).filter(t => t) : [],
+                        hasTranscript: this.selectedFiles.some(f => f.name.toLowerCase().includes('transcript')),
+                        hasNotes: this.selectedFiles.some(f => f.name.toLowerCase().includes('notes')),
+                        aiAnalysis: 'Uploaded by admin user',
+                        files: this.selectedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
+                        uploadedBy: this.user.email,
+                        uploadedAt: new Date().toISOString()
+                    };
+
+                    // Add to meetings array
+                    this.meetings.unshift(meetingData);
+                    this.saveMeetings();
+                    
+                    // Refresh display
+                    this.filteredMeetings = this.filterByCategory(this.meetings, this.currentFilter);
+                    this.renderMeetings();
+                    
+                    // Close modal and reset form
+                    this.closeUploadModal();
+                    e.target.reset();
+                    this.selectedFiles = [];
+                    this.renderFileList();
+
+                    // Show success message
+                    alert('Meeting uploaded successfully!');
+                    
+                } catch (error) {
+                    console.error('Upload failed:', error);
+                    alert('Upload failed. Please try again.');
+                } finally {
+                    this.setUploadLoading(false);
+                }
+            }
+
+            setUploadLoading(loading) {
+                const form = document.getElementById('uploadForm');
+                const btn = form.querySelector('button[type="submit"]');
+                const btnText = btn.querySelector('.btn-text');
+                const spinner = btn.querySelector('.loading-spinner');
+                
+                if (loading) {
+                    btn.disabled = true;
+                    btnText.style.display = 'none';
+                    spinner.style.display = 'inline-block';
+                } else {
+                    btn.disabled = false;
+                    btnText.style.display = 'inline';
+                    spinner.style.display = 'none';
+                }
             }
 
             handleSearch(query) {
@@ -429,6 +883,10 @@
                 localStorage.setItem('wcsc_meeting_archives', JSON.stringify(this.meetings));
             }
 
+            closeUploadModal() {
+                document.getElementById('uploadModal').classList.remove('active');
+            }
+
             loadSampleMeetings() {
                 if (this.meetings.length === 0) {
                     const sampleMeetings = [
@@ -470,32 +928,6 @@
                             hasTranscript: true,
                             hasNotes: true,
                             aiAnalysis: 'Core concepts: Servant leadership, Humility in action, Community transformation'
-                        },
-                        {
-                            id: 'meeting_004',
-                            title: 'Planning Q4 Community Outreach',
-                            date: '2025-08-04',
-                            attendees: 14,
-                            duration: 75,
-                            summary: 'Strategic planning session for our fourth quarter community outreach initiatives. Food drives, mentorship programs, and partnership with local organizations discussed.',
-                            tags: ['Planning', 'Community Service', 'Outreach', 'Local Partnerships'],
-                            scriptureReferences: ['Matthew 25:35-40', 'Galatians 6:2', 'Romans 12:13'],
-                            hasTranscript: false,
-                            hasNotes: true,
-                            aiAnalysis: 'Action items: Food drive coordination, Mentorship program launch, Community partnerships'
-                        },
-                        {
-                            id: 'meeting_005',
-                            title: 'Wisdom in Decision Making',
-                            date: '2025-07-28',
-                            attendees: 16,
-                            duration: 85,
-                            summary: 'Study on biblical wisdom and its application in daily decision-making. Practical exercises on discernment, seeking counsel, and trusting God\'s guidance in major life choices.',
-                            tags: ['Scripture Study', 'Wisdom', 'Decision Making', 'Discernment'],
-                            scriptureReferences: ['Proverbs 3:5-6', 'James 1:5', 'Proverbs 19:20'],
-                            hasTranscript: true,
-                            hasNotes: true,
-                            aiAnalysis: 'Key insights: Trust in divine guidance, Value of wise counsel, Practical discernment'
                         }
                     ];
 
@@ -506,7 +938,15 @@
             }
         }
 
-        // Global functions for meeting interactions
+        // Global functions
+        function showUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+        }
+
         function openMeeting(meetingId) {
             window.location.href = `meeting.html?id=${meetingId}`;
         }
@@ -519,9 +959,28 @@
             window.location.href = `scripture.html?from=${meetingId}`;
         }
 
+        async function logoutUser() {
+            const archivesManager = window.archivesManager;
+            
+            if (archivesManager && archivesManager.supabase) {
+                try {
+                    const { error } = await archivesManager.supabase.auth.signOut();
+                    if (error) throw error;
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            }
+            
+            // Clear local storage
+            localStorage.removeItem('wcsc_current_user');
+            
+            // Redirect to home
+            window.location.href = 'index.html';
+        }
+
         // Initialize archives when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            new ArchivesManager();
+            window.archivesManager = new ArchivesManager();
         });
     </script>
 </body>
