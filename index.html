@@ -20,18 +20,34 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#principles">Principles</a></li>
                 <li><a href="#pillars">Pillars</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="archives.html">Archives</a></li>
-                <li><a href="scripture.html">Scripture</a></li>
+                <!-- MEMBER-ONLY LINKS - Hidden until login -->
+                <li class="member-only" style="display: none;"><a href="dashboard.html">Dashboard</a></li>
+                <li class="member-only" style="display: none;"><a href="calendar.html">Calendar</a></li>
+                <li class="member-only" style="display: none;"><a href="archives.html">Archives</a></li>
+                <li class="member-only" style="display: none;"><a href="scripture.html">Scripture</a></li>
             </ul>
             <div class="auth-buttons">
+                <!-- GUEST BUTTONS -->
                 <div class="guest-only">
                     <a href="login.html" class="btn btn-secondary">Member Login</a>
                     <a href="#contact" class="btn btn-primary">Join the Brotherhood</a>
                 </div>
+                <!-- MEMBER PROFILE DROPDOWN -->
                 <div class="member-only" style="display: none;">
-                    <a href="calendar.html" class="btn btn-secondary">Calendar</a>
-                    <a href="#contact" class="btn btn-primary">Contact</a>
+                    <div class="profile-dropdown">
+                        <button class="profile-btn" id="profileButton">
+                            <span class="profile-avatar" id="profileAvatar">👤</span>
+                            <span class="profile-name" id="profileName">Member</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="profile-menu" id="profileMenu">
+                            <a href="dashboard.html">🏠 Dashboard</a>
+                            <a href="profile.html">👤 My Profile</a>
+                            <a href="account.html">⚙️ My Account</a>
+                            <div class="menu-divider"></div>
+                            <button onclick="logoutUser()">🚪 Logout</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -205,7 +221,7 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
     <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
     <script src="js/main.js"></script>
-    <script src="js/auth-supabase.js" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
+    <script src="js/auth-enhanced.js" onerror="console.warn('Auth script failed to load - basic functionality only')"></script>
     <script src="js/contact-enhanced.js" onerror="console.warn('Enhanced contact script failed to load - basic contact form available')"></script>
 </body>
 </html>
