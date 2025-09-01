@@ -88,26 +88,6 @@
             gap: 1rem;
         }
 
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.3);
-            color: #dc3545;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .success-message {
-            background: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.3);
-            color: #28a745;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-
         .back-to-home {
             text-align: center;
             margin-top: 2rem;
@@ -148,348 +128,113 @@
                 <p class="auth-subtitle">Join the brotherhood of iron sharpening iron</p>
             </div>
 
-            <!-- Error/Success Messages -->
-            <div id="errorMessage" class="error-message" style="display: none;"></div>
-            <div id="successMessage" class="success-message" style="display: none;"></div>
-
             <!-- Tabs -->
             <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchTab('login')">Login</button>
-                <button class="auth-tab" onclick="switchTab('signup')">Join Brotherhood</button>
+                <button class="auth-tab active" id="show-login">Login</button>
+                <button class="auth-tab" id="show-register">Join Brotherhood</button>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" class="auth-form active">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <span class="btn-text">Login</span>
-                    <span class="loading-spinner" style="display: none;"></span>
-                </button>
-                <div class="back-to-home">
-                    <a href="index.html">← Back to Home</a>
-                </div>
-            </form>
-
-            <!-- Signup Form -->
-            <form id="signupForm" class="auth-form">
-                <div class="form-row">
+            <!-- Login Container -->
+            <div id="login-container" class="auth-form active">
+                <form id="login-form">
                     <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" name="firstName" required>
+                        <label>Email or Username</label>
+                        <input type="text" name="username" required>
                     </div>
                     <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" name="lastName" required>
+                        <label>Password</label>
+                        <input type="password" name="password" required>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" name="phone" required>
-                </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Login
+                    </button>
+                    <div class="back-to-home">
+                        <a href="index.html">← Back to Home</a>
+                    </div>
+                </form>
+            </div>
 
-                <div class="form-row">
+            <!-- Registration Container -->
+            <div id="register-container" class="auth-form">
+                <form id="register-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" required>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
-                        <label>City</label>
-                        <input type="text" name="city" required>
+                        <label>Username</label>
+                        <input type="text" name="username" required>
                     </div>
+                    
                     <div class="form-group">
-                        <label>State</label>
-                        <input type="text" name="state" required>
+                        <label>Email</label>
+                        <input type="email" name="email" required>
                     </div>
-                </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" required>
+                    </div>
 
-                <div class="form-group">
-                    <label>Age</label>
-                    <input type="number" name="age" min="18" max="100" required>
-                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" name="state" required>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Occupation</label>
-                    <input type="text" name="occupation" required>
-                </div>
+                    <div class="form-group">
+                        <label>Chapter</label>
+                        <select name="chapter" required>
+                            <option value="">Select Chapter...</option>
+                            <option value="alpha">Alpha Chapter</option>
+                            <option value="beta">Beta Chapter</option>
+                            <option value="gamma">Gamma Chapter</option>
+                            <option value="delta">Delta Chapter</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>Church/Religious Affiliation (Optional)</label>
-                    <input type="text" name="church">
-                </div>
+                    <div class="form-group">
+                        <label>Tell us about yourself</label>
+                        <textarea name="bio" rows="3" placeholder="Why do you want to join the brotherhood? What are you hoping to gain from this experience?"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>How did you hear about us?</label>
-                    <select name="referralSource" required>
-                        <option value="">Select...</option>
-                        <option value="friend">Friend/Family</option>
-                        <option value="church">Church</option>
-                        <option value="social-media">Social Media</option>
-                        <option value="website">Website Search</option>
-                        <option value="event">Community Event</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" minlength="8" required>
+                    </div>
 
-                <div class="form-group">
-                    <label>Why do you want to join the brotherhood?</label>
-                    <textarea name="motivation" rows="3" required placeholder="Tell us about your interest in joining our brotherhood and what you hope to gain from the experience..."></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password" minlength="8" required>
+                    </div>
 
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" minlength="8" required>
-                </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Join the Brotherhood
+                    </button>
 
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" name="confirmPassword" minlength="8" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <span class="btn-text">Join the Brotherhood</span>
-                    <span class="loading-spinner" style="display: none;"></span>
-                </button>
-
-                <div class="back-to-home">
-                    <a href="index.html">← Back to Home</a>
-                </div>
-            </form>
+                    <div class="back-to-home">
+                        <a href="index.html">← Back to Home</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="backend/config/supabase.js"></script>
-    <script>
-        // Tab switching
-        function switchTab(tab) {
-            // Update tab buttons
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update forms
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            document.getElementById(tab + 'Form').classList.add('active');
-            
-            // Clear messages
-            hideMessages();
-        }
-
-        // Message functions
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            document.getElementById('successMessage').style.display = 'none';
-        }
-
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-            document.getElementById('errorMessage').style.display = 'none';
-        }
-
-        function hideMessages() {
-            document.getElementById('errorMessage').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'none';
-        }
-
-        // Loading state functions
-        function setLoading(form, loading) {
-            const btn = form.querySelector('button[type="submit"]');
-            const btnText = btn.querySelector('.btn-text');
-            const spinner = btn.querySelector('.loading-spinner');
-            
-            if (loading) {
-                btn.disabled = true;
-                btnText.style.display = 'none';
-                spinner.style.display = 'inline-block';
-            } else {
-                btn.disabled = false;
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-            }
-        }
-
-        // Authentication class
-        class Authentication {
-            constructor() {
-                this.supabase = window.supabase || null;
-                this.setupEventListeners();
-            }
-
-            setupEventListeners() {
-                document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
-                document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
-                
-                // Check if user is already logged in
-                this.checkAuthState();
-            }
-
-            async checkAuthState() {
-                if (!this.supabase) return;
-                
-                try {
-                    const { data: { user } } = await this.supabase.auth.getUser();
-                    if (user) {
-                        // User is logged in, redirect to dashboard
-                        window.location.href = 'dashboard.html';
-                    }
-                } catch (error) {
-                    console.log('Not authenticated');
-                }
-            }
-
-            async handleLogin(e) {
-                e.preventDefault();
-                hideMessages();
-                setLoading(e.target, true);
-
-                const formData = new FormData(e.target);
-                const email = formData.get('email');
-                const password = formData.get('password');
-
-                try {
-                    if (this.supabase) {
-                        const { data, error } = await this.supabase.auth.signInWithPassword({
-                            email: email,
-                            password: password,
-                        });
-
-                        if (error) throw error;
-
-                        showSuccess('Login successful! Redirecting...');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        // Fallback for demo/development
-                        await this.simulateAuth(email, password, 'login');
-                    }
-                } catch (error) {
-                    showError(error.message || 'Login failed. Please try again.');
-                } finally {
-                    setLoading(e.target, false);
-                }
-            }
-
-            async handleSignup(e) {
-                e.preventDefault();
-                hideMessages();
-                setLoading(e.target, true);
-
-                const formData = new FormData(e.target);
-                const password = formData.get('password');
-                const confirmPassword = formData.get('confirmPassword');
-
-                // Validate password match
-                if (password !== confirmPassword) {
-                    showError('Passwords do not match');
-                    setLoading(e.target, false);
-                    return;
-                }
-
-                const userData = {
-                    email: formData.get('email'),
-                    password: password,
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    phone: formData.get('phone'),
-                    city: formData.get('city'),
-                    state: formData.get('state'),
-                    age: parseInt(formData.get('age')),
-                    occupation: formData.get('occupation'),
-                    church: formData.get('church'),
-                    referralSource: formData.get('referralSource'),
-                    motivation: formData.get('motivation')
-                };
-
-                try {
-                    if (this.supabase) {
-                        // Create auth user
-                        const { data, error } = await this.supabase.auth.signUp({
-                            email: userData.email,
-                            password: userData.password,
-                            options: {
-                                data: {
-                                    firstName: userData.firstName,
-                                    lastName: userData.lastName,
-                                    phone: userData.phone,
-                                    city: userData.city,
-                                    state: userData.state,
-                                    age: userData.age,
-                                    occupation: userData.occupation,
-                                    church: userData.church,
-                                    referralSource: userData.referralSource,
-                                    motivation: userData.motivation,
-                                    role: 'member',
-                                    joinedAt: new Date().toISOString()
-                                }
-                            }
-                        });
-
-                        if (error) throw error;
-
-                        showSuccess('Account created successfully! Please check your email to verify your account.');
-                        setTimeout(() => {
-                            switchTab('login');
-                        }, 2000);
-                    } else {
-                        // Fallback for demo/development
-                        await this.simulateAuth(userData.email, userData.password, 'signup', userData);
-                    }
-                } catch (error) {
-                    showError(error.message || 'Signup failed. Please try again.');
-                } finally {
-                    setLoading(e.target, false);
-                }
-            }
-
-            async simulateAuth(email, password, type, userData = null) {
-                // Simulate API delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                if (type === 'signup') {
-                    // Store user data in localStorage for demo
-                    const users = JSON.parse(localStorage.getItem('wcsc_users') || '{}');
-                    users[email] = {
-                        ...userData,
-                        id: Date.now().toString(),
-                        createdAt: new Date().toISOString()
-                    };
-                    localStorage.setItem('wcsc_users', JSON.stringify(users));
-                    
-                    showSuccess('Account created successfully! You can now login.');
-                    setTimeout(() => switchTab('login'), 2000);
-                } else {
-                    // Simulate login
-                    const users = JSON.parse(localStorage.getItem('wcsc_users') || '{}');
-                    if (users[email] && users[email].password === password) {
-                        localStorage.setItem('wcsc_current_user', JSON.stringify(users[email]));
-                        showSuccess('Login successful! Redirecting...');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        throw new Error('Invalid email or password');
-                    }
-                }
-            }
-        }
-
-        // Initialize authentication when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new Authentication();
-        });
-    </script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
