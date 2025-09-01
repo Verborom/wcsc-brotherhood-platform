@@ -15,8 +15,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--dark-bg);
-            padding: 2rem;
+            background: var(--gradient-1);
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 1rem;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(201, 169, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(201, 169, 110, 0.08) 0%, transparent 50%);
         }
 
         .auth-card {
@@ -25,471 +39,161 @@
             padding: 3rem;
             border-radius: 20px;
             border: 1px solid rgba(201, 169, 110, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
             width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 2;
         }
 
         .auth-header {
             text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .auth-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        .auth-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 1rem;
             margin-bottom: 2rem;
-            background: rgba(201, 169, 110, 0.1);
-            padding: 0.5rem;
-            border-radius: 15px;
         }
 
-        .auth-tab {
-            flex: 1;
-            padding: 1rem;
-            text-align: center;
-            background: none;
-            border: none;
+        .auth-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .auth-header p {
             color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .auth-message {
+            padding: 1rem;
             border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
         }
 
         .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.3);
-            color: #dc3545;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
         }
 
         .success-message {
-            background: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.3);
-            color: #28a745;
-            padding: 1rem;
-            border-radius: 10px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .form-group {
             margin-bottom: 1.5rem;
-            font-size: 0.9rem;
         }
 
-        .back-to-home {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .back-to-home a {
-            color: var(--gold);
-            text-decoration: none;
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
             font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
-        .back-to-home a:hover {
-            color: var(--gold-light);
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        @media (max-width: 768px) {
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+        }
+
+        .auth-toggle a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
             .auth-card {
                 padding: 2rem 1.5rem;
                 margin: 1rem;
-            }
-
-            .auth-title {
-                font-size: 2rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+    <a href="/" class="back-link btn btn-secondary">← Back to Home</a>
+    
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <h1 class="auth-title">⚔️ Brotherhood</h1>
-                <p class="auth-subtitle">Join the brotherhood of iron sharpening iron</p>
+                <h1>⚔️ Member Login</h1>
+                <p>Access your brotherhood resources</p>
             </div>
 
-            <!-- Error/Success Messages -->
-            <div id="errorMessage" class="error-message" style="display: none;"></div>
-            <div id="successMessage" class="success-message" style="display: none;"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required autocomplete="username">
+                </div>
 
-            <!-- Tabs -->
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchTab('login')">Login</button>
-                <button class="auth-tab" onclick="switchTab('signup')">Join Brotherhood</button>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Login
+                </button>
+            </form>
+
+            <div class="auth-toggle">
+                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Don't have an account?</p>
+                <a href="register.html">Join the Brotherhood</a>
             </div>
-
-            <!-- Login Form -->
-            <form id="loginForm" class="auth-form active">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <span class="btn-text">Login</span>
-                    <span class="loading-spinner" style="display: none;"></span>
-                </button>
-                <div class="back-to-home">
-                    <a href="index.html">← Back to Home</a>
-                </div>
-            </form>
-
-            <!-- Signup Form -->
-            <form id="signupForm" class="auth-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" name="lastName" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" name="phone" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>City</label>
-                        <input type="text" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label>State</label>
-                        <input type="text" name="state" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Age</label>
-                    <input type="number" name="age" min="18" max="100" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Occupation</label>
-                    <input type="text" name="occupation" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Church/Religious Affiliation (Optional)</label>
-                    <input type="text" name="church">
-                </div>
-
-                <div class="form-group">
-                    <label>How did you hear about us?</label>
-                    <select name="referralSource" required>
-                        <option value="">Select...</option>
-                        <option value="friend">Friend/Family</option>
-                        <option value="church">Church</option>
-                        <option value="social-media">Social Media</option>
-                        <option value="website">Website Search</option>
-                        <option value="event">Community Event</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Why do you want to join the brotherhood?</label>
-                    <textarea name="motivation" rows="3" required placeholder="Tell us about your interest in joining our brotherhood and what you hope to gain from the experience..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" minlength="8" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" name="confirmPassword" minlength="8" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <span class="btn-text">Join the Brotherhood</span>
-                    <span class="loading-spinner" style="display: none;"></span>
-                </button>
-
-                <div class="back-to-home">
-                    <a href="index.html">← Back to Home</a>
-                </div>
-            </form>
         </div>
     </div>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="backend/config/supabase.js"></script>
-    <script>
-        // Tab switching
-        function switchTab(tab) {
-            // Update tab buttons
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update forms
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            document.getElementById(tab + 'Form').classList.add('active');
-            
-            // Clear messages
-            hideMessages();
-        }
-
-        // Message functions
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            document.getElementById('successMessage').style.display = 'none';
-        }
-
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-            document.getElementById('errorMessage').style.display = 'none';
-        }
-
-        function hideMessages() {
-            document.getElementById('errorMessage').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'none';
-        }
-
-        // Loading state functions
-        function setLoading(form, loading) {
-            const btn = form.querySelector('button[type="submit"]');
-            const btnText = btn.querySelector('.btn-text');
-            const spinner = btn.querySelector('.loading-spinner');
-            
-            if (loading) {
-                btn.disabled = true;
-                btnText.style.display = 'none';
-                spinner.style.display = 'inline-block';
-            } else {
-                btn.disabled = false;
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-            }
-        }
-
-        // Authentication class
-        class Authentication {
-            constructor() {
-                this.supabase = window.supabase || null;
-                this.setupEventListeners();
-            }
-
-            setupEventListeners() {
-                document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
-                document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
-                
-                // Check if user is already logged in
-                this.checkAuthState();
-            }
-
-            async checkAuthState() {
-                if (!this.supabase) return;
-                
-                try {
-                    const { data: { user } } = await this.supabase.auth.getUser();
-                    if (user) {
-                        // User is logged in, redirect to dashboard
-                        window.location.href = 'dashboard.html';
-                    }
-                } catch (error) {
-                    console.log('Not authenticated');
-                }
-            }
-
-            async handleLogin(e) {
-                e.preventDefault();
-                hideMessages();
-                setLoading(e.target, true);
-
-                const formData = new FormData(e.target);
-                const email = formData.get('email');
-                const password = formData.get('password');
-
-                try {
-                    if (this.supabase) {
-                        const { data, error } = await this.supabase.auth.signInWithPassword({
-                            email: email,
-                            password: password,
-                        });
-
-                        if (error) throw error;
-
-                        showSuccess('Login successful! Redirecting...');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        // Fallback for demo/development
-                        await this.simulateAuth(email, password, 'login');
-                    }
-                } catch (error) {
-                    showError(error.message || 'Login failed. Please try again.');
-                } finally {
-                    setLoading(e.target, false);
-                }
-            }
-
-            async handleSignup(e) {
-                e.preventDefault();
-                hideMessages();
-                setLoading(e.target, true);
-
-                const formData = new FormData(e.target);
-                const password = formData.get('password');
-                const confirmPassword = formData.get('confirmPassword');
-
-                // Validate password match
-                if (password !== confirmPassword) {
-                    showError('Passwords do not match');
-                    setLoading(e.target, false);
-                    return;
-                }
-
-                const userData = {
-                    email: formData.get('email'),
-                    password: password,
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    phone: formData.get('phone'),
-                    city: formData.get('city'),
-                    state: formData.get('state'),
-                    age: parseInt(formData.get('age')),
-                    occupation: formData.get('occupation'),
-                    church: formData.get('church'),
-                    referralSource: formData.get('referralSource'),
-                    motivation: formData.get('motivation')
-                };
-
-                try {
-                    if (this.supabase) {
-                        // Create auth user
-                        const { data, error } = await this.supabase.auth.signUp({
-                            email: userData.email,
-                            password: userData.password,
-                            options: {
-                                data: {
-                                    firstName: userData.firstName,
-                                    lastName: userData.lastName,
-                                    phone: userData.phone,
-                                    city: userData.city,
-                                    state: userData.state,
-                                    age: userData.age,
-                                    occupation: userData.occupation,
-                                    church: userData.church,
-                                    referralSource: userData.referralSource,
-                                    motivation: userData.motivation,
-                                    role: 'member',
-                                    joinedAt: new Date().toISOString()
-                                }
-                            }
-                        });
-
-                        if (error) throw error;
-
-                        showSuccess('Account created successfully! Please check your email to verify your account.');
-                        setTimeout(() => {
-                            switchTab('login');
-                        }, 2000);
-                    } else {
-                        // Fallback for demo/development
-                        await this.simulateAuth(userData.email, userData.password, 'signup', userData);
-                    }
-                } catch (error) {
-                    showError(error.message || 'Signup failed. Please try again.');
-                } finally {
-                    setLoading(e.target, false);
-                }
-            }
-
-            async simulateAuth(email, password, type, userData = null) {
-                // Simulate API delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                if (type === 'signup') {
-                    // Store user data in localStorage for demo
-                    const users = JSON.parse(localStorage.getItem('wcsc_users') || '{}');
-                    users[email] = {
-                        ...userData,
-                        id: Date.now().toString(),
-                        createdAt: new Date().toISOString()
-                    };
-                    localStorage.setItem('wcsc_users', JSON.stringify(users));
-                    
-                    showSuccess('Account created successfully! You can now login.');
-                    setTimeout(() => switchTab('login'), 2000);
-                } else {
-                    // Simulate login
-                    const users = JSON.parse(localStorage.getItem('wcsc_users') || '{}');
-                    if (users[email] && users[email].password === password) {
-                        localStorage.setItem('wcsc_current_user', JSON.stringify(users[email]));
-                        showSuccess('Login successful! Redirecting...');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        throw new Error('Invalid email or password');
-                    }
-                }
-            }
-        }
-
-        // Initialize authentication when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new Authentication();
-        });
-    </script>
+    <!-- Include Supabase and authentication scripts -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
+    <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth-enhanced.js"></script>
+    <script src="js/registration.js"></script>
 </body>
 </html>
