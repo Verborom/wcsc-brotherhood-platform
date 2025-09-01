@@ -305,11 +305,10 @@
         </div>
     </div>
 
-    <!-- Include Supabase and authentication scripts -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2" onerror="console.warn('Supabase library failed to load - running in fallback mode')"></script>
-    <script src="backend/config/supabase.js" onerror="console.warn('Supabase config failed to load - running in fallback mode')"></script>
+    <!-- Include Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/auth-enhanced.js"></script>
-    <script src="js/registration.js"></script>
+    <script src="js/auth-supabase.js"></script>
 </body>
 </html>
