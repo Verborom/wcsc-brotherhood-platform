@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WCSC Brotherhood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            margin-top: 100px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+
+        .welcome-section {
+            flex: 1;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(201, 169, 110, 0.1);
+            border-radius: 15px;
+            min-width: 100px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(201, 169, 110, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(201, 169, 110, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .upcoming-events {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+        }
+
+        .event-date {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .event-details h4 {
+            color: var(--gold);
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .event-details p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(201, 169, 110, 0.1);
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover {
+            background: rgba(201, 169, 110, 0.2);
+            border-color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .quick-link-icon {
+            font-size: 2rem;
+            color: var(--gold);
+        }
+
+        .quick-link-text {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .recent-activity {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-top: 0.25rem;
+        }
+
+        .activity-content h4 {
+            color: var(--text-primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .activity-content p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .quick-stats {
+                justify-content: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">⚔️ WCSC Brotherhood</a>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="scripture.html">Scripture</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="profile-btn" id="profileButton">
+                        <span class="profile-avatar" id="profileAvatar">👤</span>
+                        <span class="profile-name" id="profileName">Member</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <a href="dashboard.html">🏠 Dashboard</a>
+                        <a href="profile.html">👤 My Profile</a>
+                        <a href="account.html">⚙️ My Account</a>
+                        <div class="menu-divider"></div>
+                        <button onclick="logoutUser()">🚪 Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome back, <span id="memberName">Brother</span>!</h1>
+                <p class="welcome-subtitle">Ready to sharpen and be sharpened? Here's what's happening in the brotherhood.</p>
+            </div>
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="upcomingEvents">3</div>
+                    <div class="stat-label">Upcoming</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="memberSince">2025</div>
+                    <div class="stat-label">Member Since</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="meetingsAttended">12</div>
+                    <div class="stat-label">Meetings</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Upcoming Events -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">📅 Upcoming Events</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="upcoming-events">
+                        <li class="event-item">
+                            <div class="event-date">Sep 3</div>
+                            <div class="event-details">
+                                <h4>Brotherhood Meeting</h4>
+                                <p>7:00 PM - Fellowship and accountability</p>
+                            </div>
+                        </li>
+                        <li class="event-item">
+                            <div class="event-date">Sep 5</div>
+                            <div class="event-details">
+                                <h4>Scripture Study</h4>
+                                <p>6:30 PM - Iron Sharpens Iron study</p>
+                            </div>
+                        </li>
+                        <li class="event-item">
+                            <div class="event-date">Sep 10</div>
+                            <div class="event-details">
+                                <h4>Community Service</h4>
+                                <p>9:00 AM - Food bank volunteer work</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">🚀 Quick Access</h2>
+                </div>
+                <div class="card-content">
+                    <div class="quick-links">
+                        <a href="calendar.html" class="quick-link">
+                            <span class="quick-link-icon">📅</span>
+                            <span class="quick-link-text">Calendar</span>
+                        </a>
+                        <a href="archives.html" class="quick-link">
+                            <span class="quick-link-icon">📚</span>
+                            <span class="quick-link-text">Archives</span>
+                        </a>
+                        <a href="scripture.html" class="quick-link">
+                            <span class="quick-link-icon">📖</span>
+                            <span class="quick-link-text">Scripture</span>
+                        </a>
+                        <a href="profile.html" class="quick-link">
+                            <span class="quick-link-icon">👤</span>
+                            <span class="quick-link-text">Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">🔄 Recent Activity</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="recent-activity">
+                        <li class="activity-item">
+                            <span class="activity-icon">📝</span>
+                            <div class="activity-content">
+                                <h4>Meeting notes added</h4>
+                                <p>Faith and Brotherhood discussion - 2 days ago</p>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <span class="activity-icon">📖</span>
+                            <div class="activity-content">
+                                <h4>New scripture package</h4>
+                                <p>Iron Sharpens Iron study released - 1 week ago</p>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <span class="activity-icon">👥</span>
+                            <div class="activity-content">
+                                <h4>New member joined</h4>
+                                <p>Welcome Brother Marcus to the fellowship - 1 week ago</p>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <span class="activity-icon">🎯</span>
+                            <div class="activity-content">
+                                <h4>Accountability check-in</h4>
+                                <p>Weekly progress review completed - 1 week ago</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- This Week's Focus -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2 class="card-title">🎯 This Week's Focus</h2>
+                </div>
+                <div class="card-content">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <h3 style="color: var(--gold); font-family: 'Playfair Display', serif; margin-bottom: 1rem;">Iron Sharpens Iron</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+                            "As iron sharpens iron, so one person sharpens another." - Proverbs 27:17
+                        </p>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Progress this week:</span>
+                        <div style="flex: 1; background: rgba(201, 169, 110, 0.2); height: 8px; border-radius: 4px; margin: 0 1rem; overflow: hidden;">
+                            <div style="background: var(--gold); height: 100%; width: 65%; border-radius: 4px;"></div>
+                        </div>
+                        <span style="color: var(--gold); font-weight: 600; font-size: 0.9rem;">65%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="backend/config/supabase.js"></script>
+    <script>
+        class Dashboard {
+            constructor() {
+                this.supabase = window.supabase || null;
+                this.user = null;
+                this.init();
+            }
+
+            async init() {
+                // Check authentication
+                await this.checkAuth();
+                
+                // Load user data
+                this.loadUserData();
+                
+                // Setup profile dropdown
+                this.setupProfileDropdown();
+                
+                // Load dashboard data
+                this.loadDashboardData();
+            }
+
+            async checkAuth() {
+                if (this.supabase) {
+                    try {
+                        const { data: { user } } = await this.supabase.auth.getUser();
+                        if (!user) {
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        this.user = user;
+                    } catch (error) {
+                        console.error('Auth check failed:', error);
+                        window.location.href = 'login.html';
+                    }
+                } else {
+                    // Fallback for demo
+                    const userData = localStorage.getItem('wcsc_current_user');
+                    if (!userData) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    this.user = JSON.parse(userData);
+                }
+            }
+
+            loadUserData() {
+                if (!this.user) return;
+
+                // Update profile display
+                const profileName = document.getElementById('profileName');
+                const memberName = document.getElementById('memberName');
+                const profileAvatar = document.getElementById('profileAvatar');
+
+                if (this.supabase && this.user.user_metadata) {
+                    const firstName = this.user.user_metadata.firstName || 'Brother';
+                    profileName.textContent = firstName;
+                    memberName.textContent = firstName;
+                    
+                    // Set avatar to first letter of name
+                    profileAvatar.textContent = firstName.charAt(0).toUpperCase();
+                } else if (this.user.firstName) {
+                    // Fallback for demo
+                    profileName.textContent = this.user.firstName;
+                    memberName.textContent = this.user.firstName;
+                    profileAvatar.textContent = this.user.firstName.charAt(0).toUpperCase();
+                }
+
+                // Update member since year
+                const memberSinceEl = document.getElementById('memberSince');
+                if (this.user.createdAt || this.user.created_at) {
+                    const joinDate = new Date(this.user.createdAt || this.user.created_at);
+                    memberSinceEl.textContent = joinDate.getFullYear();
+                }
+            }
+
+            setupProfileDropdown() {
+                const profileButton = document.getElementById('profileButton');
+                const profileDropdown = document.getElementById('profileDropdown');
+
+                profileButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    profileDropdown.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.remove('active');
+                    }
+                });
+            }
+
+            loadDashboardData() {
+                // Load upcoming events from calendar
+                this.loadUpcomingEvents();
+                
+                // Load member statistics
+                this.updateMemberStats();
+            }
+
+            loadUpcomingEvents() {
+                // This would normally fetch from your backend
+                // For now, we'll use the sample data already in the HTML
+            }
+
+            updateMemberStats() {
+                // Update with real data from your backend
+                // For demo purposes, we'll use sample data
+                const stats = {
+                    upcomingEvents: 3,
+                    meetingsAttended: Math.floor(Math.random() * 20) + 5,
+                };
+
+                document.getElementById('upcomingEvents').textContent = stats.upcomingEvents;
+                document.getElementById('meetingsAttended').textContent = stats.meetingsAttended;
+            }
+        }
+
+        // Global logout function
+        async function logoutUser() {
+            const dashboard = window.dashboardInstance;
+            
+            if (dashboard && dashboard.supabase) {
+                try {
+                    const { error } = await dashboard.supabase.auth.signOut();
+                    if (error) throw error;
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            }
+            
+            // Clear local storage
+            localStorage.removeItem('wcsc_current_user');
+            
+            // Redirect to home
+            window.location.href = 'index.html';
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboardInstance = new Dashboard();
+        });
+    </script>
+</body>
+</html>
